@@ -24,8 +24,8 @@ echo "${BOLD}${GREEN}┌ Mobile App Commit & Branch Validation ┐${RESET}"
 
 # Branch name validation (allows main/dev and feature branches)
 BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "")
-# Allow: main, dev, develop, master, release-X.Y.Z, and <type>-<name> branches
-BRANCH_PATTERN='^(main|dev|develop|master|release-[0-9]+\.[0-9]+\.[0-9]+|(hotfix|feat|test|refactor|style|fix|chore|docs|build|perf|ci|revert)-[a-z0-9-]+)$'
+# Allow: main, dev, develop, master, release-X.Y.Z, M[0-9]+, and <type>-<name> branches
+BRANCH_PATTERN='^(main|dev|develop|master|M[0-9]+|release-[0-9]+\.[0-9]+\.[0-9]+|(hotfix|feat|test|refactor|style|fix|chore|docs|build|perf|ci|revert)-[a-z0-9-]+)$'
 
 # Skip validation for HEAD (during initial commit or rebase)
 if [ "$BRANCH" = "HEAD" ]; then

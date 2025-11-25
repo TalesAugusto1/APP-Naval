@@ -1,5 +1,5 @@
 import { SchoolListScreen } from '@/screens/schools/SchoolListScreen';
 
-export default function HomeScreen() {
+export default function SchoolsScreen() {
   return <SchoolListScreen />;
 }
