@@ -6,6 +6,12 @@ import { GluestackUIProvider } from '@gluestack-ui/themed';
 
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { config } from '../gluestack.config';
+import { makeServer } from '../services/api/mock/server';
+
+if (__DEV__) {
+  makeServer({ environment: 'development' });
+  console.log('🚀 Mock API server started at /api/*');
+}
 
 export const unstable_settings = {
   anchor: '(tabs)',
