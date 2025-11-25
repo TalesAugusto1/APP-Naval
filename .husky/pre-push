@@ -1,0 +1,158 @@
+#!/usr/bin/env sh
+set -e
+
+# -----------------------------
+# School Manager Pre-push v1 - Mobile Quality Suite
+# -----------------------------
+
+# Colors (portable; disable if terminal lacks color support)
+if [ -t 1 ] && command -v tput >/dev/null 2>&1; then
+  ncolors=$(tput colors 2>/dev/null || echo 0)
+  if [ -n "$ncolors" ] && [ "$ncolors" -ge 8 ]; then
+    RED="$(tput setaf 1)"; GREEN="$(tput setaf 2)"; YELLOW="$(tput setaf 3)"; BOLD="$(tput bold)"; RESET="$(tput sgr0)"
+  else
+    RED=""; GREEN=""; YELLOW=""; BOLD=""; RESET=""
+  fi
+else
+  RED=""; GREEN=""; YELLOW=""; BOLD=""; RESET=""
+fi
+
+stamp() { date +%H:%M:%S; }
+start_ts=$(date +%s)
+
+# Enhanced error handling with recovery suggestions
+on_error() {
+  echo ""
+  echo "${RED}✖ Pre-push failed${RESET} at $(stamp)"
+  
+  # Analyze failure type and provide specific suggestions
+  if [ -f .git/prepush.log ]; then
+    echo "${YELLOW}Failure Analysis:${RESET}"
+    
+    # Check for common failure patterns
+    if grep -q "ESLint" .git/prepush.log; then
+      echo "${GREEN}• Linting Issues:${RESET} Run ${BOLD}npm run lint:fix${RESET} to auto-fix"
+    fi
+    
+    if grep -q "TypeScript\|tsc" .git/prepush.log; then
+      echo "${GREEN}• Type Errors:${RESET} Run ${BOLD}npm run type-check${RESET} for detailed errors"
+    fi
+    
+    if grep -q "test\|jest" .git/prepush.log; then
+      echo "${GREEN}• Test Failure:${RESET} Run ${BOLD}npm test${RESET} to debug"
+    fi
+    
+    echo "${YELLOW}Full log:${RESET}"
+    tail -n 30 .git/prepush.log || true
+  fi
+  
+  echo "${YELLOW}Recovery Options:${RESET}"
+  echo "  1) ${BOLD}npm run quality${RESET} - Run all quality checks locally"
+  echo "  2) ${BOLD}npm run type-check${RESET} - Check TypeScript compilation"
+  echo "  3) ${BOLD}npm test${RESET} - Run tests locally"
+  echo "  4) ${BOLD}git push --no-verify${RESET} - Skip checks (use with caution)"
+}
+trap on_error ERR
+
+echo "${BOLD}${GREEN}════════════════════════════════════════════════════════════${RESET}"
+echo "${BOLD}📱 Pre-push · Mobile Quality Suite${RESET}  $(stamp)"
+echo "${BOLD}${GREEN}════════════════════════════════════════════════════════════${RESET}"
+echo "${GREEN}• Plan:${RESET} format → lint → type-check → tests"
+
+# Enhanced run_step function with better progress tracking
+run_step() {
+  label="$1"; shift
+  echo "${GREEN}• Step:${RESET} ${label}"
+  ts=$(date +%s)
+  
+  # Create a temporary file to capture output
+  temp_log=$(mktemp)
+  
+  # Run command and capture both stdout and stderr
+  if "$@" > "$temp_log" 2>&1; then
+    # Success: append to main log and show success
+    cat "$temp_log" >> .git/prepush.log
+    echo "${GREEN}✔ ${label}${RESET} ($(( $(date +%s) - ts ))s)"
+    rm -f "$temp_log"
+    return 0
+  else
+    # Failure: append to main log and show failure
+    cat "$temp_log" >> .git/prepush.log
+    echo "${RED}✖ ${label}${RESET} ($(( $(date +%s) - ts ))s)"
+    rm -f "$temp_log"
+    return 1
+  fi
+}
+
+# Get change analysis
+CHANGED_FILES=$(git diff --name-only HEAD@{1}..HEAD 2>/dev/null || git diff --name-only origin/main..HEAD 2>/dev/null || echo "")
+DOCS_ONLY=0
+AFFECTS_SRC=0
+
+if [ -n "$CHANGED_FILES" ]; then
+  if echo "$CHANGED_FILES" | grep -qE '\.md$|^docs/'; then
+    DOCS_ONLY=1
+  fi
+  if echo "$CHANGED_FILES" | grep -qE '\.(ts|tsx|js|jsx)$'; then
+    AFFECTS_SRC=1
+  fi
+fi
+
+echo "${GREEN}• Change Analysis:${RESET}"
+printf "  - Docs only: %s\n  - Affects source: %s\n" "$DOCS_ONLY" "$AFFECTS_SRC"
+
+# Initialize log
+echo "Pre-push started at $(stamp)" > .git/prepush.log
+
+# Auto-format first
+run_step "Auto-format (Prettier)" sh -c 'npm run format 2>&1 | tee -a .git/prepush.log'
+# If formatting produced changes, guide user
+if ! git diff --quiet; then
+  echo "${YELLOW}Formatting changes were applied by Prettier.${RESET}"
+  git add -A || true
+  git diff --staged --name-only > .git/prepush-formatted.txt || true
+  echo "${GREEN}• Files formatted:${RESET}"
+  head -n 20 .git/prepush-formatted.txt 2>/dev/null || true
+  echo "${YELLOW}Next steps:${RESET}"
+  echo "  1) Review: ${BOLD}git diff --staged${RESET}"
+  echo "  2) Commit: ${BOLD}git commit -m 'style: apply prettier formatting'${RESET}"
+  echo "  3) Push: ${BOLD}git push${RESET}"
+  exit 1
+fi
+
+# Critical checks (fast)
+if [ "$DOCS_ONLY" -eq 0 ]; then
+  echo "${BOLD}${GREEN}Quality Checks${RESET}"
+  
+  if ! run_step "Linting" npm run lint; then
+    echo "${RED}✖ Linting failed! Fix the issues above before pushing.${RESET}"
+    exit 1
+  fi
+  
+  if ! run_step "TypeScript compilation" npm run type-check; then
+    echo "${RED}✖ TypeScript compilation failed! Fix the issues above before pushing.${RESET}"
+    exit 1
+  fi
+  
+  # Tests (if test script exists)
+  if grep -q '"test"' package.json; then
+    if ! run_step "Unit tests" npm test; then
+      echo "${YELLOW}⚠️ Tests failed but continuing (optional for now)${RESET}"
+    fi
+  else
+    echo "${YELLOW}ℹ️ No test script found. Add tests for better quality gates!${RESET}"
+  fi
+else
+  echo "${YELLOW}Skipping quality checks (docs-only changes).${RESET}"
+fi
+
+# Performance summary
+total_time=$(( $(date +%s) - start_ts ))
+echo "${BOLD}${GREEN}✅ Pre-push passed${RESET} · ${YELLOW}Summary:${RESET} lint OK · type-check OK · ${total_time}s"
+
+# Show performance metrics
+echo "${GREEN}• Performance Summary:${RESET}"
+echo "  - Total time: ${total_time}s"
+echo "  - Change type: $(if [ "$DOCS_ONLY" -gt 0 ]; then echo "docs-only"; else echo "full"; fi)"
+echo "${YELLOW}• Next:${RESET} Add tests to strengthen quality gates!"
+

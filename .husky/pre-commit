@@ -1,0 +1,87 @@
+#!/usr/bin/env sh
+set -e
+
+# -----------------------------
+# School Manager Pre-commit UX v1 - Mobile Quality Gates
+# -----------------------------
+
+# Colors (portable; disable if terminal lacks color support)
+if [ -t 1 ] && command -v tput >/dev/null 2>&1; then
+  ncolors=$(tput colors 2>/dev/null || echo 0)
+  if [ -n "$ncolors" ] && [ "$ncolors" -ge 8 ]; then
+    RED="$(tput setaf 1)"; GREEN="$(tput setaf 2)"; YELLOW="$(tput setaf 3)"; BOLD="$(tput bold)"; RESET="$(tput sgr0)"
+  else
+    RED=""; GREEN=""; YELLOW=""; BOLD=""; RESET=""
+  fi
+else
+  RED=""; GREEN=""; YELLOW=""; BOLD=""; RESET=""
+fi
+
+stamp() { date +%H:%M:%S; }
+start_ts=$(date +%s)
+
+# Enhanced error handling with specific recovery suggestions
+on_error() {
+  echo ""
+  echo "${RED}✖ Pre-commit failed${RESET} at $(stamp)"
+  
+  # Analyze failure type and provide specific suggestions
+  if [ -f .git/lint-staged.log ]; then
+    echo "${YELLOW}Failure Analysis:${RESET}"
+    
+    # Check for common failure patterns
+    if grep -q "ESLint" .git/lint-staged.log; then
+      echo "${GREEN}• ESLint Issues:${RESET} Run ${BOLD}npm run lint:fix${RESET} to auto-fix"
+    fi
+    
+    if grep -q "Prettier" .git/lint-staged.log; then
+      echo "${GREEN}• Formatting Issues:${RESET} Run ${BOLD}npm run format${RESET} to auto-fix"
+    fi
+    
+    if grep -q "TypeScript" .git/lint-staged.log; then
+      echo "${GREEN}• Type Errors:${RESET} Run ${BOLD}npm run type-check${RESET} for detailed errors"
+    fi
+    
+    echo "${YELLOW}Recent errors:${RESET}"
+    tail -n 20 .git/lint-staged.log || true
+  fi
+  
+  echo "${YELLOW}Quick Fixes:${RESET}"
+  echo "  1) ${BOLD}npm run lint:fix${RESET} - Auto-fix linting issues"
+  echo "  2) ${BOLD}npm run format${RESET} - Auto-fix formatting"
+  echo "  3) ${BOLD}git add . && git commit${RESET} - Re-stage and commit"
+}
+trap on_error ERR
+
+echo "${BOLD}${GREEN}────────────────────────────────────────────────────────────${RESET}"
+echo "${BOLD}📱 Pre-commit · React Native Quality Checks${RESET}  $(stamp)"
+echo "${BOLD}${GREEN}────────────────────────────────────────────────────────────${RESET}"
+echo "${GREEN}• Checklist:${RESET} Lint/Format for Mobile"
+
+# Show staged summary
+STAGED_FILES=$(git diff --name-only --cached || true)
+STAGED_COUNT=$(printf "%s" "$STAGED_FILES" | grep -c . || true)
+echo "${GREEN}• Staged files:${RESET} $STAGED_COUNT"
+if [ "$STAGED_COUNT" -eq 0 ]; then
+  echo "${YELLOW}No staged files. Skipping lint-staged.${RESET}"
+  echo "${GREEN}✔ Pre-commit checks passed (nothing to do).${RESET}"
+  exit 0
+fi
+
+# Lint staged files
+step_ts=$(date +%s)
+echo "${GREEN}• Step:${RESET} Lint & format staged files"
+if command -v npx >/dev/null 2>&1; then
+  # Capture output to a log for better end-of-run diagnostics
+  npx lint-staged 2>&1 | tee .git/lint-staged.log
+else
+  echo "${YELLOW}npx not found; running full lint and format checks${RESET}"
+  npm run lint
+  npm run format:check
+fi
+elapsed=$(( $(date +%s) - step_ts ))
+echo "${GREEN}✔ Lint & format completed${RESET} (${elapsed}s)"
+
+total=$(( $(date +%s) - start_ts ))
+echo "${BOLD}${GREEN}✅ Pre-commit passed${RESET} · ${YELLOW}Summary:${RESET} lint-staged OK · ${total}s"
+

@@ -1,0 +1,91 @@
+#!/usr/bin/env sh
+set -e
+
+# -----------------------------
+# School Manager Commit Message Gate v1 - Mobile
+# -----------------------------
+
+# Colors (portable; disable if terminal lacks color support)
+if [ -t 1 ] && command -v tput >/dev/null 2>&1; then
+  ncolors=$(tput colors 2>/dev/null || echo 0)
+  if [ -n "$ncolors" ] && [ "$ncolors" -ge 8 ]; then
+    RED="$(tput setaf 1)"; GREEN="$(tput setaf 2)"; YELLOW="$(tput setaf 3)"; BOLD="$(tput bold)"; RESET="$(tput sgr0)"
+  else
+    RED=""; GREEN=""; YELLOW=""; BOLD=""; RESET=""
+  fi
+else
+  RED=""; GREEN=""; YELLOW=""; BOLD=""; RESET=""
+fi
+
+MSG_FILE=$1
+MSG=$(cat "$MSG_FILE")
+
+echo "${BOLD}${GREEN}┌ Mobile App Commit & Branch Validation ┐${RESET}"
+
+# Branch name validation (allows main/dev and feature branches)
+BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "")
+# Allow: main, dev, develop, master, release-X.Y.Z, and <type>-<name> branches
+BRANCH_PATTERN='^(main|dev|develop|master|release-[0-9]+\.[0-9]+\.[0-9]+|(hotfix|feat|test|refactor|style|fix|chore|docs|build|perf|ci|revert)-[a-z0-9-]+)$'
+
+# Skip validation for HEAD (during initial commit or rebase)
+if [ "$BRANCH" = "HEAD" ]; then
+  echo "${YELLOW}⚠️ Detached HEAD state detected - skipping branch validation${RESET}"
+  BRANCH="(detached HEAD)"
+elif [ -n "$BRANCH" ] && ! printf "%s" "$BRANCH" | grep -Eq "$BRANCH_PATTERN" ; then
+  echo "${RED}❌ Invalid branch name: ${BOLD}$BRANCH${RESET}"
+  echo "${YELLOW}Expected:${RESET} ${BOLD}<type>-<name>${RESET} (lowercase, hyphens) or protected branches"
+  echo "${GREEN}Examples:${RESET}"
+  echo "  • ${BOLD}feat-school-list-screen${RESET}"
+  echo "  • ${BOLD}fix-navigation-crash${RESET}"
+  echo "  • ${BOLD}hotfix-data-persistence${RESET}"
+  echo "  • ${BOLD}release-1.0.0${RESET}"
+  echo "${YELLOW}Protected branches:${RESET} main, dev, develop, master"
+  echo "${YELLOW}Tip:${RESET} Allowed types: feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert, hotfix"
+  exit 1
+fi
+
+# Enhanced Conventional Commits validation
+PATTERN='^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\([a-z0-9._/-]+\))?: .{1,}'
+if ! printf "%s" "$MSG" | grep -E -q "$PATTERN" ; then
+  echo "${RED}❌ Invalid commit message format${RESET}"
+  echo "${YELLOW}Expected:${RESET} ${BOLD}type(scope?): subject${RESET}"
+  echo "${GREEN}Examples:${RESET}"
+  echo "  • ${BOLD}feat(schools): implement school list screen${RESET}"
+  echo "  • ${BOLD}fix(navigation): resolve router navigation issue${RESET}"
+  echo "  • ${BOLD}docs(readme): update setup instructions${RESET}"
+  echo "  • ${BOLD}refactor(state): migrate to Zustand${RESET}"
+  echo "${YELLOW}Tip:${RESET} Scope is optional. Use project-relevant scopes like: schools, classes, navigation, state, ui"
+  exit 1
+fi
+
+# Subject length validation (50-72 characters recommended)
+SUBJECT=$(printf "%s" "$MSG" | head -n1 | sed 's/^[^:]*: *//')
+SUBJECT_LENGTH=${#SUBJECT}
+if [ "$SUBJECT_LENGTH" -lt 10 ]; then
+  echo "${YELLOW}⚠️ Subject too short (${SUBJECT_LENGTH} chars). Consider adding more detail.${RESET}"
+elif [ "$SUBJECT_LENGTH" -gt 72 ]; then
+  echo "${YELLOW}⚠️ Subject too long (${SUBJECT_LENGTH} chars). Consider shortening to 72 chars or less.${RESET}"
+fi
+
+# Check for breaking changes
+if printf "%s" "$MSG" | grep -q "BREAKING CHANGE"; then
+  echo "${GREEN}🔨 Breaking change detected${RESET}"
+fi
+
+# Validate scope against common mobile app patterns
+SCOPE=$(printf "%s" "$MSG" | sed -n 's/^[^(]*(\([^)]*\)).*/\1/p')
+if [ -n "$SCOPE" ]; then
+  # Common scopes for this React Native app
+  VALID_SCOPES="schools|classes|navigation|state|ui|api|storage|hooks|types|config|ci|docs|tests|husky"
+  if printf "%s" "$SCOPE" | grep -Eq "^($VALID_SCOPES)$"; then
+    echo "${GREEN}📁 Valid scope '${SCOPE}' detected${RESET}"
+  else
+    echo "${YELLOW}⚠️ Uncommon scope '${SCOPE}'. Consider using: schools, classes, navigation, state, ui, api${RESET}"
+  fi
+fi
+
+echo "${GREEN}✅ Commit message validation passed${RESET}"
+echo "${GREEN}• Branch:${RESET} $BRANCH"
+echo "${GREEN}• Subject length:${RESET} ${SUBJECT_LENGTH} chars"
+echo "${GREEN}• Format:${RESET} Conventional Commits compliant"
+

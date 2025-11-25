@@ -1,0 +1,31 @@
+#!/usr/bin/env sh
+
+# -----------------------------
+# School Manager Post-merge Hook
+# -----------------------------
+
+# Colors
+if [ -t 1 ] && command -v tput >/dev/null 2>&1; then
+  ncolors=$(tput colors 2>/dev/null || echo 0)
+  if [ -n "$ncolors" ] && [ "$ncolors" -ge 8 ]; then
+    GREEN="$(tput setaf 2)"; YELLOW="$(tput setaf 3)"; BOLD="$(tput bold)"; RESET="$(tput sgr0)"
+  else
+    GREEN=""; YELLOW=""; BOLD=""; RESET=""
+  fi
+else
+  GREEN=""; YELLOW=""; BOLD=""; RESET=""
+fi
+
+echo "${BOLD}${GREEN}📦 Post-merge · Dependency Check${RESET}"
+
+# Check if package.json or package-lock.json changed
+CHANGED_FILES="$(git diff-tree -r --name-only --no-commit-id ORIG_HEAD HEAD)"
+
+if echo "$CHANGED_FILES" | grep -q "package.json\|package-lock.json"; then
+  echo "${YELLOW}• Dependencies changed. Running npm install...${RESET}"
+  npm install
+  echo "${GREEN}✔ Dependencies updated${RESET}"
+else
+  echo "${GREEN}• No dependency changes detected${RESET}"
+fi
+

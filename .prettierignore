@@ -1,0 +1,30 @@
+# Dependencies
+node_modules/
+.expo/
+.expo-shared/
+
+# Build output
+dist/
+build/
+.next/
+android/
+ios/
+
+# Caches
+.cache/
+*.log
+.DS_Store
+
+# Environment files
+.env
+.env.*
+
+# Git
+.git/
+.husky/_/
+
+# Lock files
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+
