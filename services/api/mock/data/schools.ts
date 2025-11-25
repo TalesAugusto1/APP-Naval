@@ -1,0 +1,68 @@
+import { School } from '@/types';
+
+export const schoolsData: School[] = [
+  {
+    id: '1',
+    name: 'Escola Municipal José de Alencar',
+    address: 'Rua das Flores, 123 - Centro',
+    classCount: 8,
+    createdAt: new Date('2024-01-15'),
+    updatedAt: new Date('2024-01-15'),
+  },
+  {
+    id: '2',
+    name: 'Escola Estadual Maria Clara',
+    address: 'Av. Brasil, 456 - Jardim América',
+    classCount: 12,
+    createdAt: new Date('2024-01-20'),
+    updatedAt: new Date('2024-01-20'),
+  },
+  {
+    id: '3',
+    name: 'Colégio Municipal Santos Dumont',
+    address: 'Rua XV de Novembro, 789 - Vila Nova',
+    classCount: 6,
+    createdAt: new Date('2024-02-01'),
+    updatedAt: new Date('2024-02-01'),
+  },
+  {
+    id: '4',
+    name: 'Escola Estadual Dom Pedro II',
+    address: 'Praça da República, 321 - Centro Histórico',
+    classCount: 10,
+    createdAt: new Date('2024-02-10'),
+    updatedAt: new Date('2024-02-10'),
+  },
+  {
+    id: '5',
+    name: 'Escola Municipal Monteiro Lobato',
+    address: 'Rua das Acácias, 567 - Parque Industrial',
+    classCount: 5,
+    createdAt: new Date('2024-02-15'),
+    updatedAt: new Date('2024-02-15'),
+  },
+  {
+    id: '6',
+    name: 'Colégio Estadual Machado de Assis',
+    address: 'Av. Paulista, 890 - Bela Vista',
+    classCount: 15,
+    createdAt: new Date('2024-03-01'),
+    updatedAt: new Date('2024-03-01'),
+  },
+  {
+    id: '7',
+    name: 'Escola Municipal Cecília Meireles',
+    address: 'Rua dos Lírios, 234 - Jardim Botânico',
+    classCount: 7,
+    createdAt: new Date('2024-03-10'),
+    updatedAt: new Date('2024-03-10'),
+  },
+  {
+    id: '8',
+    name: 'Escola Estadual Carlos Drummond de Andrade',
+    address: 'Av. Independência, 678 - Centro',
+    classCount: 9,
+    createdAt: new Date('2024-03-15'),
+    updatedAt: new Date('2024-03-15'),
+  },
+];
