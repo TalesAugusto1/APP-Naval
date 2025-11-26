@@ -6,7 +6,7 @@ export default function SchoolDetail() {
     <>
       <Stack.Screen
         options={{
-          title: 'Detalhes da Escola',
+          headerShown: false,
         }}
       />
       <SchoolDetailScreen />
