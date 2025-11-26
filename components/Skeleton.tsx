@@ -29,9 +29,9 @@ export function SkeletonBox({ width = '$full', height, borderRadius = '$sm' }: S
   }, [opacity]);
 
   return (
-    <Animated.View style={{ opacity, width: typeof width === 'number' ? width : undefined }}>
+    <Animated.View style={{ opacity }}>
       <Box
-        width={typeof width === 'string' ? width : width}
+        width={width as any}
         height={height}
         bg="$backgroundLight200"
         borderRadius={borderRadius}
