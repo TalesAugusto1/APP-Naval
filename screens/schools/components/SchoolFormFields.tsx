@@ -10,6 +10,7 @@ import {
   HStack,
 } from '@gluestack-ui/themed';
 import { Building, MapPin } from 'lucide-react-native';
+import { useThemeColors } from '@/hooks/useThemeColors';
 
 interface SchoolFormFieldsProps {
   name: string;
@@ -30,13 +31,15 @@ export function SchoolFormFields({
   onBlurName,
   onBlurAddress,
 }: SchoolFormFieldsProps) {
+  const colors = useThemeColors();
+
   return (
     <VStack space="xl">
       <FormControl isInvalid={!!errors.name} isRequired>
         <FormControlLabel>
           <HStack space="xs" alignItems="center">
-            <Building size={16} color="#4b5563" />
-            <FormControlLabelText fontWeight="$semibold" color="$gray900">
+            <Building size={16} color={colors.iconSecondary} />
+            <FormControlLabelText fontWeight="$semibold" color={colors.textColor}>
               Nome da Escola
             </FormControlLabelText>
           </HStack>
@@ -44,8 +47,8 @@ export function SchoolFormFields({
         <Input
           borderRadius="$lg"
           borderWidth={1}
-          borderColor={errors.name ? '$error500' : '$gray100'}
-          bg="$white"
+          borderColor={errors.name ? '$error500' : colors.borderColor}
+          bg={colors.cardBg}
         >
           <InputField
             placeholder="Ex: Escola Municipal José de Alencar"
@@ -67,8 +70,8 @@ export function SchoolFormFields({
       <FormControl isInvalid={!!errors.address} isRequired>
         <FormControlLabel>
           <HStack space="xs" alignItems="center">
-            <MapPin size={16} color="#4b5563" />
-            <FormControlLabelText fontWeight="$semibold" color="$gray900">
+            <MapPin size={16} color={colors.iconSecondary} />
+            <FormControlLabelText fontWeight="$semibold" color={colors.textColor}>
               Endereço
             </FormControlLabelText>
           </HStack>
@@ -76,8 +79,8 @@ export function SchoolFormFields({
         <Input
           borderRadius="$lg"
           borderWidth={1}
-          borderColor={errors.address ? '$error500' : '$gray100'}
-          bg="$white"
+          borderColor={errors.address ? '$error500' : colors.borderColor}
+          bg={colors.cardBg}
         >
           <InputField
             placeholder="Ex: Rua das Flores, 123 - Centro"

@@ -1,4 +1,4 @@
-import { ScrollView, useColorScheme } from 'react-native';
+import { ScrollView, useColorScheme as useSystemColorScheme } from 'react-native';
 import {
   Box,
   VStack,
@@ -11,9 +11,11 @@ import {
   ButtonText,
 } from '@gluestack-ui/themed';
 import { Sun, Moon, Monitor, Check, User, LogOut, LogIn } from 'lucide-react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useSettingsStore } from '@/store';
 import { useAuthStore } from '@/store/useAuthStore';
 import { useUIStore } from '@/store/useUIStore';
+import { useColorScheme } from '@/hooks/use-color-scheme';
 import { router } from 'expo-router';
 
 type ThemeMode = 'light' | 'dark' | 'system';
@@ -38,7 +40,16 @@ export function SettingsScreen() {
   const { theme, setTheme } = useSettingsStore();
   const { user, isAuthenticated, logout, isLoading } = useAuthStore();
   const { showToast } = useUIStore();
-  const systemTheme = useColorScheme();
+  const systemTheme = useSystemColorScheme();
+  const colorScheme = useColorScheme();
+  const insets = useSafeAreaInsets();
+
+  const isDark = colorScheme === 'dark';
+  const bgColor = isDark ? '#0a0a0a' : '#fafafa';
+  const cardBgColor = isDark ? '$backgroundDark900' : '$white';
+  const borderColor = isDark ? '$borderDark800' : '$borderLight100';
+  const textColor = isDark ? '$textDark50' : '$textLight900';
+  const textSecondaryColor = isDark ? '$textDark400' : '$textLight500';
 
   const handleLogout = async () => {
     try {
@@ -50,14 +61,24 @@ export function SettingsScreen() {
   };
 
   return (
-    <ScrollView style={{ flex: 1, backgroundColor: '#fafafa' }}>
-      <VStack flex={1} p="$6" space="xl">
-        <Heading size="2xl">Configurações</Heading>
+    <ScrollView style={{ flex: 1, backgroundColor: bgColor }}>
+      <VStack flex={1} px="$6" pt="$6" pb="$6" space="xl" style={{ paddingTop: insets.top + 24 }}>
+        <Heading size="2xl" color={textColor}>
+          Configurações
+        </Heading>
 
         <VStack space="md">
-          <Heading size="lg">Conta</Heading>
+          <Heading size="lg" color={textColor}>
+            Conta
+          </Heading>
           {isAuthenticated && user ? (
-            <Box bg="$white" p="$4" borderRadius="$2xl" borderWidth={1} borderColor="$gray100">
+            <Box
+              bg={cardBgColor}
+              p="$4"
+              borderRadius="$2xl"
+              borderWidth={1}
+              borderColor={borderColor}
+            >
               <VStack space="lg">
                 <HStack space="md" alignItems="center">
                   <Box
@@ -71,15 +92,15 @@ export function SettingsScreen() {
                     <User size={28} color="#2196F3" />
                   </Box>
                   <VStack flex={1}>
-                    <Text size="lg" fontWeight="$bold" color="$gray900">
+                    <Text size="lg" fontWeight="$bold" color={textColor}>
                       {user.name}
                     </Text>
-                    <Text size="sm" color="$gray500">
+                    <Text size="sm" color={textSecondaryColor}>
                       {user.email}
                     </Text>
                   </VStack>
                 </HStack>
-                <Divider bg="$gray100" />
+                <Divider bg={borderColor} />
                 <Button
                   variant="outline"
                   action="secondary"
@@ -97,9 +118,15 @@ export function SettingsScreen() {
               </VStack>
             </Box>
           ) : (
-            <Box bg="$white" p="$4" borderRadius="$2xl" borderWidth={1} borderColor="$gray100">
+            <Box
+              bg={cardBgColor}
+              p="$4"
+              borderRadius="$2xl"
+              borderWidth={1}
+              borderColor={borderColor}
+            >
               <VStack space="md">
-                <Text size="sm" color="$gray600">
+                <Text size="sm" color={textSecondaryColor}>
                   Faça login para gerenciar escolas e turmas
                 </Text>
                 <Button
@@ -122,23 +149,26 @@ export function SettingsScreen() {
         <Divider />
 
         <VStack space="md">
-          <Heading size="lg">Aparência</Heading>
-          <Text size="sm" color="$textLight600">
+          <Heading size="lg" color={textColor}>
+            Aparência
+          </Heading>
+          <Text size="sm" color={textSecondaryColor}>
             Escolha o tema do aplicativo
           </Text>
 
           <VStack space="xs">
             {THEME_OPTIONS.map((option) => {
               const Icon = option.icon;
+              const isSelected = theme === option.value;
               return (
                 <Pressable key={option.value} onPress={() => setTheme(option.value)}>
                   {({ pressed }) => (
                     <Box
-                      bg="$white"
+                      bg={cardBgColor}
                       p="$4"
                       borderRadius="$2xl"
                       borderWidth={2}
-                      borderColor={theme === option.value ? '$primary500' : '$gray100'}
+                      borderColor={isSelected ? '$primary500' : borderColor}
                       style={{
                         transform: [{ scale: pressed ? 0.98 : 1 }],
                       }}
@@ -147,22 +177,28 @@ export function SettingsScreen() {
                         <Box
                           width={48}
                           height={48}
-                          bg={theme === option.value ? '$primary500' : '$gray50'}
+                          bg={
+                            isSelected
+                              ? '$primary500'
+                              : isDark
+                                ? '$backgroundDark800'
+                                : '$backgroundLight100'
+                          }
                           borderRadius="$xl"
                           justifyContent="center"
                           alignItems="center"
                         >
-                          <Icon size={24} color={theme === option.value ? '#ffffff' : '#6b7280'} />
+                          <Icon size={24} color={isSelected ? '#ffffff' : '#6b7280'} />
                         </Box>
                         <VStack flex={1}>
-                          <Text size="md" fontWeight="$bold" color="$gray900">
+                          <Text size="md" fontWeight="$bold" color={textColor}>
                             {option.label}
                           </Text>
-                          <Text size="sm" color="$gray500">
+                          <Text size="sm" color={textSecondaryColor}>
                             {option.description}
                           </Text>
                         </VStack>
-                        {theme === option.value && <Check size={24} color="#2196F3" />}
+                        {isSelected && <Check size={24} color="#2196F3" />}
                       </HStack>
                     </Box>
                   )}
@@ -183,24 +219,32 @@ export function SettingsScreen() {
         <Divider />
 
         <VStack space="md">
-          <Heading size="lg">Sobre</Heading>
-          <Box bg="$white" p="$4" borderRadius="$2xl" borderWidth={1} borderColor="$gray100">
+          <Heading size="lg" color={textColor}>
+            Sobre
+          </Heading>
+          <Box
+            bg={cardBgColor}
+            p="$4"
+            borderRadius="$2xl"
+            borderWidth={1}
+            borderColor={borderColor}
+          >
             <VStack space="md">
               <HStack justifyContent="space-between">
-                <Text size="md" color="$gray500">
+                <Text size="md" color={textSecondaryColor}>
                   Versão do app
                 </Text>
-                <Text size="md" fontWeight="$semibold" color="$gray900">
+                <Text size="md" fontWeight="$semibold" color={textColor}>
                   1.0.0
                 </Text>
               </HStack>
-              <Divider bg="$gray100" />
+              <Divider bg={borderColor} />
               <HStack justifyContent="space-between">
-                <Text size="md" color="$gray500">
+                <Text size="md" color={textSecondaryColor}>
                   Desenvolvido com
                 </Text>
-                <Text size="md" fontWeight="$semibold" color="$gray900">
-                  ❤️ React Native + Expo
+                <Text size="md" fontWeight="$semibold" color={textColor}>
+                  React Native + Expo
                 </Text>
               </HStack>
             </VStack>

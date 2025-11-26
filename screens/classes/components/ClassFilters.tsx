@@ -22,6 +22,7 @@ import {
   Badge,
   Pressable,
 } from '@gluestack-ui/themed';
+import { useThemeColors } from '@/hooks/useThemeColors';
 import { Shift } from '@/types';
 import { SlidersHorizontal } from 'lucide-react-native';
 

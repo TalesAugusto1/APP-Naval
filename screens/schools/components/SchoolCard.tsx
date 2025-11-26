@@ -1,6 +1,7 @@
 import { Pressable } from 'react-native';
 import { Box, Heading, Text, HStack, VStack, Divider } from '@gluestack-ui/themed';
 import { School } from '@/types';
+import { useThemeColors } from '@/hooks/useThemeColors';
 import { navigateToSchoolDetail } from '@/navigation';
 import { Building, MapPin, Users } from 'lucide-react-native';
 import { IconContainer } from '@/components/IconContainer';
@@ -11,6 +12,8 @@ interface SchoolCardProps {
 }
 
 export function SchoolCard({ school }: SchoolCardProps) {
+  const colors = useThemeColors();
+
   return (
     <Pressable
       onPress={() => navigateToSchoolDetail(school.id)}
@@ -21,12 +24,12 @@ export function SchoolCard({ school }: SchoolCardProps) {
     >
       {({ pressed }) => (
         <Box
-          bg="$white"
+          bg={colors.cardBg}
           borderRadius="$2xl"
           p="$4"
           mb="$3"
           borderWidth={1}
-          borderColor="$gray100"
+          borderColor={colors.borderColor}
           style={{
             transform: [{ scale: pressed ? 0.98 : 1 }],
             shadowColor: '#000',
@@ -39,24 +42,24 @@ export function SchoolCard({ school }: SchoolCardProps) {
           <HStack space="md" alignItems="flex-start" mb="$3">
             <IconContainer icon={Building} variant="blue" />
             <VStack flex={1} space="xs">
-              <Heading size="md" numberOfLines={1} color="$gray900">
+              <Heading size="md" numberOfLines={1} color={colors.textColor}>
                 {school.name}
               </Heading>
               <HStack space="xs" alignItems="center">
-                <MapPin size={14} color="#6b7280" />
-                <Text size="sm" color="$gray500" numberOfLines={2} flex={1}>
+                <MapPin size={14} color={colors.iconSecondary} />
+                <Text size="sm" color={colors.textSecondary} numberOfLines={2} flex={1}>
                   {school.address}
                 </Text>
               </HStack>
             </VStack>
           </HStack>
 
-          <Divider bg="$gray100" />
+          <Divider bg={colors.dividerColor} />
 
           <HStack mt="$3" alignItems="center" justifyContent="space-between">
             <HStack space="xs" alignItems="center">
-              <Users size={16} color="#9ca3af" />
-              <Text size="sm" color="$gray600">
+              <Users size={16} color={colors.iconTertiary} />
+              <Text size="sm" color={colors.textSecondary}>
                 {school.classCount} {school.classCount === 1 ? 'turma' : 'turmas'}
               </Text>
             </HStack>

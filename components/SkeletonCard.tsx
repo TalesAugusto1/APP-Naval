@@ -1,10 +1,13 @@
 import { Box, VStack, HStack } from '@gluestack-ui/themed';
+import { useThemeColors } from '@/hooks/useThemeColors';
 import { SkeletonBox } from './Skeleton';
 
 export function SchoolCardSkeleton() {
+  const colors = useThemeColors();
+
   return (
     <Box
-      bg="$white"
+      bg={colors.cardBg}
       borderRadius="$lg"
       p="$4"
       mb="$3"
@@ -28,9 +31,11 @@ export function SchoolCardSkeleton() {
 }
 
 export function ClassCardSkeleton() {
+  const colors = useThemeColors();
+
   return (
     <Box
-      bg="$white"
+      bg={colors.cardBg}
       borderRadius="$lg"
       p="$4"
       mb="$3"

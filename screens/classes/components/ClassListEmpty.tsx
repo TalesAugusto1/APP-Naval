@@ -1,4 +1,5 @@
 import { VStack, Heading, Text, Button, ButtonText, ButtonIcon, Box } from '@gluestack-ui/themed';
+import { useThemeColors } from '@/hooks/useThemeColors';
 import { navigateToCreateClass } from '@/navigation';
 import { BookOpen, Plus } from 'lucide-react-native';
 
@@ -7,6 +8,7 @@ interface ClassListEmptyProps {
 }
 
 export function ClassListEmpty({ schoolId }: ClassListEmptyProps) {
+  const colors = useThemeColors();
   const message = schoolId ? 'Esta escola não tem turmas cadastradas' : 'Nenhuma turma cadastrada';
 
   const subtitle = schoolId
@@ -18,18 +20,18 @@ export function ClassListEmpty({ schoolId }: ClassListEmptyProps) {
       <Box
         width={80}
         height={80}
-        bg="$gray50"
+        bg={colors.surfaceBg}
         borderRadius="$full"
         justifyContent="center"
         alignItems="center"
       >
-        <BookOpen size={40} color="#9ca3af" />
+        <BookOpen size={40} color={colors.iconTertiary} />
       </Box>
       <VStack space="sm" alignItems="center">
-        <Heading size="lg" textAlign="center" color="$gray900">
+        <Heading size="lg" textAlign="center" color={colors.textColor}>
           {message}
         </Heading>
-        <Text size="md" color="$gray500" textAlign="center">
+        <Text size="md" color={colors.textSecondary} textAlign="center">
           {subtitle}
         </Text>
       </VStack>

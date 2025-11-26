@@ -12,6 +12,7 @@ import {
   Pressable,
 } from '@gluestack-ui/themed';
 import { Eye, EyeOff, LucideIcon } from 'lucide-react-native';
+import { useThemeColors } from '@/hooks/useThemeColors';
 
 interface AuthInputProps {
   label: string;
@@ -42,14 +43,15 @@ export function AuthInput({
   accessibilityLabel,
   accessibilityHint,
 }: AuthInputProps) {
+  const colors = useThemeColors();
   const [showPassword, setShowPassword] = useState(false);
 
   return (
     <FormControl isInvalid={!!error}>
       <FormControlLabel>
         <HStack space="xs" alignItems="center">
-          {Icon && <Icon size={16} color="#4b5563" />}
-          <FormControlLabelText fontWeight="$semibold" color="$gray900">
+          {Icon && <Icon size={16} color={colors.iconSecondary} />}
+          <FormControlLabelText fontWeight="$semibold" color={colors.textColor}>
             {label}
           </FormControlLabelText>
         </HStack>
@@ -57,8 +59,8 @@ export function AuthInput({
       <Input
         borderRadius="$lg"
         borderWidth={1}
-        borderColor={error ? '$error500' : '$gray100'}
-        bg="$white"
+        borderColor={error ? '$error500' : colors.borderColor}
+        bg={colors.cardBg}
       >
         <InputField
           placeholder={placeholder}
@@ -82,9 +84,9 @@ export function AuthInput({
           >
             <InputSlot pr="$4">
               {showPassword ? (
-                <EyeOff size={20} color="#6b7280" />
+                <EyeOff size={20} color={colors.iconSecondary} />
               ) : (
-                <Eye size={20} color="#6b7280" />
+                <Eye size={20} color={colors.iconSecondary} />
               )}
             </InputSlot>
           </Pressable>

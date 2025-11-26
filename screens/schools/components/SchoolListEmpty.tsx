@@ -1,25 +1,28 @@
 import { VStack, Heading, Text, Button, ButtonText, ButtonIcon, Box } from '@gluestack-ui/themed';
+import { useThemeColors } from '@/hooks/useThemeColors';
 import { navigateToCreateSchool } from '@/navigation';
 import { Building, Plus } from 'lucide-react-native';
 
 export function SchoolListEmpty() {
+  const colors = useThemeColors();
+
   return (
     <VStack flex={1} justifyContent="center" alignItems="center" p="$8" space="lg">
       <Box
         width={80}
         height={80}
-        bg="$gray50"
+        bg={colors.surfaceBg}
         borderRadius="$full"
         justifyContent="center"
         alignItems="center"
       >
-        <Building size={40} color="#9ca3af" />
+        <Building size={40} color={colors.iconTertiary} />
       </Box>
       <VStack space="sm" alignItems="center">
-        <Heading size="lg" textAlign="center" color="$gray900">
+        <Heading size="lg" textAlign="center" color={colors.textColor}>
           Nenhuma escola cadastrada
         </Heading>
-        <Text size="md" color="$gray500" textAlign="center">
+        <Text size="md" color={colors.textSecondary} textAlign="center">
           Comece adicionando sua primeira escola
         </Text>
       </VStack>

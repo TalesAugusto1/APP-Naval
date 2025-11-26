@@ -13,9 +13,11 @@ import {
 } from '@gluestack-ui/themed';
 import { Plus } from 'lucide-react-native';
 import { useLocalSearchParams } from 'expo-router';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useClassStore, useSchoolStore } from '@/store';
 import { useAuthStore } from '@/store/useAuthStore';
 import { useUIStore } from '@/store/useUIStore';
+import { useThemeColors } from '@/hooks/useThemeColors';
 import { navigateToCreateClass, navigateToLogin } from '@/navigation';
 import { ClassCard } from './components/ClassCard';
 import { ClassListEmpty } from './components/ClassListEmpty';
@@ -30,10 +32,12 @@ export function ClassListScreen() {
   const { schools } = useSchoolStore();
   const { isAuthenticated } = useAuthStore();
   const { showToast } = useUIStore();
+  const colors = useThemeColors();
   const [refreshing, setRefreshing] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedShifts, setSelectedShifts] = useState<Shift[]>([]);
   const [selectedYears, setSelectedYears] = useState<number[]>([]);
+  const insets = useSafeAreaInsets();
 
   const handleCreateClass = () => {
     if (!isAuthenticated) {
@@ -91,7 +95,7 @@ export function ClassListScreen() {
 
   if (error && classes.length === 0) {
     return (
-      <Box flex={1} bg="$backgroundLight50">
+      <Box flex={1} bg={colors.bgColor}>
         <VStack flex={1} justifyContent="center" alignItems="center" p="$8">
           <Text size="lg" color="$error500" textAlign="center" mb="$4">
             {error}
@@ -106,10 +110,10 @@ export function ClassListScreen() {
 
   if (isLoading && classes.length === 0) {
     return (
-      <Box flex={1} bg="$backgroundLight50">
-        <VStack flex={1} p="$4" space="md">
+      <Box flex={1} bg={colors.bgColor} style={{ paddingTop: insets.top }}>
+        <VStack flex={1} px="$4" pt="$4" space="md">
           {schoolName && (
-            <Heading size="lg" mb="$2">
+            <Heading size="lg" color={colors.textColor} mb="$2">
               Turmas - {schoolName}
             </Heading>
           )}
@@ -135,10 +139,10 @@ export function ClassListScreen() {
   }
 
   return (
-    <Box flex={1} bg="$backgroundLight50" position="relative">
-      <VStack flex={1} p="$4" space="md">
+    <Box flex={1} bg={colors.bgColor} position="relative" style={{ paddingTop: insets.top }}>
+      <VStack flex={1} px="$4" pt="$4" space="md">
         {schoolName && (
-          <Heading size="lg" mb="$2">
+          <Heading size="lg" color={colors.textColor} mb="$2">
             Turmas - {schoolName}
           </Heading>
         )}
@@ -158,7 +162,7 @@ export function ClassListScreen() {
         </HStack>
 
         {filteredClasses.length > 0 && (searchQuery || activeFilterCount > 0) && (
-          <Text size="sm" color="$textLight600">
+          <Text size="sm" color={colors.textTertiary}>
             {filteredClasses.length}{' '}
             {filteredClasses.length === 1 ? 'turma encontrada' : 'turmas encontradas'}
           </Text>
@@ -167,7 +171,7 @@ export function ClassListScreen() {
         {filteredClasses.length === 0 && !isLoading ? (
           searchQuery || activeFilterCount > 0 ? (
             <VStack flex={1} justifyContent="center" alignItems="center" p="$8">
-              <Text size="lg" textAlign="center" mb="$4">
+              <Text size="lg" color={colors.textColor} textAlign="center" mb="$4">
                 {searchQuery
                   ? `Nenhuma turma encontrada para "${searchQuery}"`
                   : 'Nenhuma turma encontrada com os filtros selecionados'}
@@ -194,7 +198,7 @@ export function ClassListScreen() {
               />
             )}
             keyExtractor={(item) => item.id}
-            contentContainerStyle={{ paddingBottom: 80 }}
+            contentContainerStyle={{ paddingBottom: 80 + insets.bottom }}
             refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />}
           />
         )}
@@ -216,6 +220,7 @@ export function ClassListScreen() {
           shadowOpacity: 0.15,
           shadowRadius: 12,
           elevation: 5,
+          marginBottom: insets.bottom > 0 ? insets.bottom + 8 : 8,
         }}
       >
         <FabIcon>

@@ -1,4 +1,5 @@
 import { Badge, Text } from '@gluestack-ui/themed';
+import { useThemeColors } from '@/hooks/useThemeColors';
 
 interface StatusBadgeProps {
   label: string;
@@ -6,6 +7,8 @@ interface StatusBadgeProps {
 }
 
 export function StatusBadge({ label, variant = 'active' }: StatusBadgeProps) {
+  const colors = useThemeColors();
+
   return (
     <Badge
       variant="solid"
@@ -13,9 +16,9 @@ export function StatusBadge({ label, variant = 'active' }: StatusBadgeProps) {
       borderRadius="$full"
       px="$3"
       py="$1"
-      bg="$backgroundLight200"
+      bg={colors.surfaceBg}
     >
-      <Text size="xs" color="$gray600" fontWeight="$medium">
+      <Text size="xs" color={colors.textSecondary} fontWeight="$medium">
         {label}
       </Text>
     </Badge>

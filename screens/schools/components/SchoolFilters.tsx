@@ -17,6 +17,7 @@ import {
   RadioIcon,
   CircleIcon,
 } from '@gluestack-ui/themed';
+import { useThemeColors } from '@/hooks/useThemeColors';
 import { SlidersHorizontal } from 'lucide-react-native';
 
 type SortOption = 'name' | 'newest' | 'classes';
@@ -27,6 +28,7 @@ interface SchoolFiltersProps {
 }
 
 export function SchoolFilters({ sortBy, onSortChange }: SchoolFiltersProps) {
+  const colors = useThemeColors();
   const [isOpen, setIsOpen] = useState(false);
   const [tempSort, setTempSort] = useState(sortBy);
 
@@ -50,7 +52,9 @@ export function SchoolFilters({ sortBy, onSortChange }: SchoolFiltersProps) {
           </ActionsheetDragIndicatorWrapper>
 
           <VStack w="$full" p="$6" space="lg">
-            <Heading size="lg">Ordenar por</Heading>
+            <Heading size="lg" color={colors.textColor}>
+              Ordenar por
+            </Heading>
 
             <RadioGroup value={tempSort} onChange={setTempSort}>
               <VStack space="md">

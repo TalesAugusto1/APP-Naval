@@ -1,5 +1,6 @@
 import { VStack, Heading, Box } from '@gluestack-ui/themed';
 import { useClassStore } from '@/store';
+import { useThemeColors } from '@/hooks/useThemeColors';
 import { useEffect } from 'react';
 import { ShiftPieChart } from '@/components/charts/ShiftPieChart';
 import { YearBarChart } from '@/components/charts/YearBarChart';
@@ -10,6 +11,7 @@ interface SchoolDashboardProps {
 
 export function SchoolDashboard({ schoolId }: SchoolDashboardProps) {
   const { classes, fetchClasses } = useClassStore();
+  const colors = useThemeColors();
 
   useEffect(() => {
     fetchClasses(schoolId);
@@ -20,15 +22,15 @@ export function SchoolDashboard({ schoolId }: SchoolDashboardProps) {
   return (
     <VStack space="xl" p="$6">
       <VStack space="md">
-        <Heading size="lg" color="$gray900">
+        <Heading size="lg" color={colors.textColor}>
           Turmas por Turno
         </Heading>
         <Box
-          bg="$white"
+          bg={colors.cardBg}
           borderRadius="$2xl"
           p="$4"
           borderWidth={1}
-          borderColor="$gray100"
+          borderColor={colors.borderColor}
           style={{
             shadowColor: '#000',
             shadowOffset: { width: 0, height: 2 },
@@ -42,15 +44,15 @@ export function SchoolDashboard({ schoolId }: SchoolDashboardProps) {
       </VStack>
 
       <VStack space="md">
-        <Heading size="lg" color="$gray900">
+        <Heading size="lg" color={colors.textColor}>
           Turmas por Ano Letivo
         </Heading>
         <Box
-          bg="$white"
+          bg={colors.cardBg}
           borderRadius="$2xl"
           p="$4"
           borderWidth={1}
-          borderColor="$gray100"
+          borderColor={colors.borderColor}
           style={{
             shadowColor: '#000',
             shadowOffset: { width: 0, height: 2 },

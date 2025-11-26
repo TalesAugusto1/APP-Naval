@@ -14,8 +14,10 @@ import {
   AlertDialogFooter,
   Text,
 } from '@gluestack-ui/themed';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useLocalSearchParams } from 'expo-router';
 import { useSchoolStore, useUIStore } from '@/store';
+import { useThemeColors } from '@/hooks/useThemeColors';
 import { validateCreateSchool } from '@/services';
 import { goBack } from '@/navigation';
 import { SchoolFormFields } from './SchoolFormFields';
@@ -29,6 +31,8 @@ export function SchoolFormScreen() {
   const { selectedSchool, fetchSchoolById, createSchool, updateSchool, deleteSchool, isLoading } =
     useSchoolStore();
   const { showToast } = useUIStore();
+  const colors = useThemeColors();
+  const insets = useSafeAreaInsets();
 
   const [name, setName] = useState('');
   const [address, setAddress] = useState('');
@@ -102,10 +106,12 @@ export function SchoolFormScreen() {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={{ flex: 1 }}
     >
-      <ScrollView>
-        <Box flex={1} p="$6" bg="$backgroundLight50">
+      <ScrollView contentContainerStyle={{ paddingTop: insets.top }}>
+        <Box flex={1} p="$6" bg={colors.bgColor}>
           <VStack space="xl">
-            <Heading size="xl">{mode === 'create' ? 'Nova Escola' : 'Editar Escola'}</Heading>
+            <Heading size="xl" color={colors.textColor}>
+              {mode === 'create' ? 'Nova Escola' : 'Editar Escola'}
+            </Heading>
 
             <SchoolFormFields
               name={name}

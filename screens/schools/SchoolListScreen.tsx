@@ -1,9 +1,11 @@
 import { useEffect, useState, useMemo } from 'react';
 import { FlatList, RefreshControl } from 'react-native';
 import { Box, VStack, HStack, Fab, FabIcon, Text, Button, ButtonText } from '@gluestack-ui/themed';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useSchoolStore } from '@/store';
 import { useAuthStore } from '@/store/useAuthStore';
 import { useUIStore } from '@/store/useUIStore';
+import { useThemeColors } from '@/hooks/useThemeColors';
 import { navigateToCreateSchool, navigateToLogin } from '@/navigation';
 import { SchoolCard } from './components/SchoolCard';
 import { SchoolListEmpty } from './components/SchoolListEmpty';
@@ -19,8 +21,10 @@ export function SchoolListScreen() {
   const { schools, isLoading, error, fetchSchools, searchQuery, setSearchQuery } = useSchoolStore();
   const { isAuthenticated } = useAuthStore();
   const { showToast } = useUIStore();
+  const colors = useThemeColors();
   const [refreshing, setRefreshing] = useState(false);
   const [sortBy, setSortBy] = useState<SortOption>('name');
+  const insets = useSafeAreaInsets();
 
   const handleCreateSchool = () => {
     if (!isAuthenticated) {
@@ -60,7 +64,7 @@ export function SchoolListScreen() {
 
   if (error && schools.length === 0) {
     return (
-      <Box flex={1} bg="$backgroundLight50">
+      <Box flex={1} bg={colors.bgColor}>
         <VStack flex={1} justifyContent="center" alignItems="center" p="$8">
           <Text size="lg" color="$error500" textAlign="center" mb="$4">
             {error}
@@ -75,8 +79,8 @@ export function SchoolListScreen() {
 
   if (isLoading && schools.length === 0) {
     return (
-      <Box flex={1} bg="$backgroundLight50">
-        <VStack flex={1} p="$4" space="md">
+      <Box flex={1} bg={colors.bgColor} style={{ paddingTop: insets.top }}>
+        <VStack flex={1} px="$4" pt="$4" space="md">
           <HStack space="sm">
             <Box flex={1}>
               <SchoolSearchBar />
@@ -92,8 +96,8 @@ export function SchoolListScreen() {
   }
 
   return (
-    <Box flex={1} bg="$backgroundLight50" position="relative">
-      <VStack flex={1} p="$4" space="md">
+    <Box flex={1} bg={colors.bgColor} position="relative" style={{ paddingTop: insets.top }}>
+      <VStack flex={1} px="$4" pt="$4" space="md">
         <HStack space="sm">
           <Box flex={1}>
             <SchoolSearchBar />
@@ -106,7 +110,7 @@ export function SchoolListScreen() {
         {sortedSchools.length === 0 && !isLoading ? (
           searchQuery ? (
             <VStack flex={1} justifyContent="center" alignItems="center" p="$8">
-              <Text size="lg" textAlign="center" mb="$4">
+              <Text size="lg" color={colors.textColor} textAlign="center" mb="$4">
                 Nenhuma escola encontrada para &ldquo;{searchQuery}&rdquo;
               </Text>
               <Button onPress={() => setSearchQuery('')}>
@@ -121,7 +125,7 @@ export function SchoolListScreen() {
             data={sortedSchools}
             renderItem={({ item }) => <SchoolCard school={item} />}
             keyExtractor={(item) => item.id}
-            contentContainerStyle={{ paddingBottom: 80 }}
+            contentContainerStyle={{ paddingBottom: 80 + insets.bottom }}
             refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />}
           />
         )}
@@ -143,6 +147,7 @@ export function SchoolListScreen() {
           shadowOpacity: 0.15,
           shadowRadius: 12,
           elevation: 5,
+          marginBottom: insets.bottom > 0 ? insets.bottom + 8 : 8,
         }}
       >
         <FabIcon>

@@ -10,8 +10,10 @@ import {
   Progress,
   ProgressFilledTrack,
 } from '@gluestack-ui/themed';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAuthStore } from '@/store/useAuthStore';
 import { useUIStore } from '@/store/useUIStore';
+import { useColorScheme } from '@/hooks/use-color-scheme';
 import { goBack } from '@/navigation';
 import { AuthInput } from './components/AuthInput';
 import { AuthButton } from './components/AuthButton';
@@ -56,6 +58,13 @@ export function RegisterScreen() {
 
   const { register, isLoading } = useAuthStore();
   const { showToast } = useUIStore();
+  const colorScheme = useColorScheme();
+  const insets = useSafeAreaInsets();
+
+  const isDark = colorScheme === 'dark';
+  const bgColor = isDark ? '#0a0a0a' : '#fafafa';
+  const textColor = isDark ? '$textDark50' : '$textLight900';
+  const textSecondaryColor = isDark ? '$textDark400' : '$textLight500';
 
   const passwordStrength = password ? calculatePasswordStrength(password) : null;
 
@@ -113,17 +122,17 @@ export function RegisterScreen() {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
       <ScrollView
-        style={{ flex: 1, backgroundColor: '#fafafa' }}
-        contentContainerStyle={{ flexGrow: 1 }}
+        style={{ flex: 1, backgroundColor: bgColor }}
+        contentContainerStyle={{ flexGrow: 1, paddingTop: insets.top }}
         keyboardShouldPersistTaps="handled"
       >
         <Box flex={1} p="$6" justifyContent="center">
           <VStack space="2xl" maxWidth={400} width="$full" alignSelf="center">
             <VStack space="md">
-              <Heading size="3xl" color="$gray900">
+              <Heading size="3xl" color={textColor}>
                 Criar Conta
               </Heading>
-              <Text size="lg" color="$gray600">
+              <Text size="lg" color={textSecondaryColor}>
                 Preencha os dados para se cadastrar
               </Text>
             </VStack>
@@ -203,7 +212,7 @@ export function RegisterScreen() {
               />
 
               <HStack justifyContent="center" space="xs">
-                <Text size="sm" color="$gray600">
+                <Text size="sm" color={textSecondaryColor}>
                   Já tem uma conta?
                 </Text>
                 <Pressable

@@ -1,4 +1,5 @@
 import { VStack, Heading, Text, Button, ButtonText, HStack } from '@gluestack-ui/themed';
+import { useThemeColors } from '@/hooks/useThemeColors';
 
 type ErrorType = 'network' | '404' | '500' | 'generic';
 
@@ -44,6 +45,7 @@ export function ErrorDisplay({
   showRetry = true,
   showBack = false,
 }: ErrorDisplayProps) {
+  const colors = useThemeColors();
   const config = ERROR_CONFIG[type];
   const displayTitle = title || config.title;
   const displayMessage = message || config.message;
@@ -52,10 +54,10 @@ export function ErrorDisplay({
     <VStack flex={1} justifyContent="center" alignItems="center" p="$8" space="lg">
       <Text fontSize={80}>{config.icon}</Text>
       <VStack space="sm" alignItems="center">
-        <Heading size="lg" textAlign="center">
+        <Heading size="lg" textAlign="center" color={colors.textColor}>
           {displayTitle}
         </Heading>
-        <Text size="md" color="$textLight600" textAlign="center">
+        <Text size="md" color={colors.textTertiary} textAlign="center">
           {displayMessage}
         </Text>
       </VStack>

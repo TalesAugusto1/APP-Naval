@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Input, InputField, InputSlot, Spinner, Pressable } from '@gluestack-ui/themed';
+import { useThemeColors } from '@/hooks/useThemeColors';
 import { Search, X } from 'lucide-react-native';
 
 interface ClassSearchBarProps {
@@ -8,6 +9,7 @@ interface ClassSearchBarProps {
 }
 
 export function ClassSearchBar({ value, onChangeText }: ClassSearchBarProps) {
+  const colors = useThemeColors();
   const [localValue, setLocalValue] = useState(value);
   const [isSearching, setIsSearching] = useState(false);
 
@@ -34,8 +36,8 @@ export function ClassSearchBar({ value, onChangeText }: ClassSearchBarProps) {
       variant="outline"
       size="lg"
       borderRadius="$2xl"
-      borderColor="$gray100"
-      bg="$white"
+      borderColor={colors.borderColor}
+      bg={colors.cardBg}
       style={{
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 1 },
@@ -45,7 +47,7 @@ export function ClassSearchBar({ value, onChangeText }: ClassSearchBarProps) {
       }}
     >
       <InputSlot pl="$4">
-        <Search size={20} color="#6b7280" />
+        <Search size={20} color={colors.iconSecondary} />
       </InputSlot>
       <InputField
         placeholder="Buscar turmas…"
@@ -70,7 +72,7 @@ export function ClassSearchBar({ value, onChangeText }: ClassSearchBarProps) {
           accessibilityHint="Toque para limpar o campo de busca"
         >
           <InputSlot pr="$4">
-            <X size={20} color="#6b7280" />
+            <X size={20} color={colors.iconSecondary} />
           </InputSlot>
         </Pressable>
       )}
