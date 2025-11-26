@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { Class, CreateClassDTO, UpdateClassDTO } from '@/types';
 import { classService } from '@/services/classes';
+import { schoolService } from '@/services/schools';
 
 interface ClassState {
   classes: Class[];
@@ -60,6 +61,16 @@ export const useClassStore = create<ClassState>((set, get) => ({
         classes: [...state.classes, newClass],
         isLoading: false,
       }));
+
+      try {
+        const school = await schoolService.getSchoolById(data.schoolId);
+        await schoolService.updateSchool(data.schoolId, {
+          id: data.schoolId,
+          classCount: school.classCount + 1,
+        });
+      } catch (schoolError) {
+        console.warn('Failed to update school class count:', schoolError);
+      }
     } catch (error) {
       set({
         error: error instanceof Error ? error.message : 'Unknown error',
@@ -90,12 +101,25 @@ export const useClassStore = create<ClassState>((set, get) => ({
   deleteClass: async (id: string) => {
     set({ isLoading: true, error: null });
     try {
+      const classItem = get().classes.find((c) => c.id === id);
       await classService.deleteClass(id);
       set((state) => ({
         classes: state.classes.filter((c) => c.id !== id),
         selectedClass: state.selectedClass?.id === id ? null : state.selectedClass,
         isLoading: false,
       }));
+
+      if (classItem) {
+        try {
+          const school = await schoolService.getSchoolById(classItem.schoolId);
+          await schoolService.updateSchool(classItem.schoolId, {
+            id: classItem.schoolId,
+            classCount: Math.max(0, school.classCount - 1),
+          });
+        } catch (schoolError) {
+          console.warn('Failed to update school class count:', schoolError);
+        }
+      }
     } catch (error) {
       set({
         error: error instanceof Error ? error.message : 'Unknown error',
