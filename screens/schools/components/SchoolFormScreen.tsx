@@ -5,7 +5,6 @@ import {
   VStack,
   Button,
   ButtonText,
-  Heading,
   AlertDialog,
   AlertDialogBackdrop,
   AlertDialogContent,
@@ -13,6 +12,7 @@ import {
   AlertDialogBody,
   AlertDialogFooter,
   Text,
+  Heading,
 } from '@gluestack-ui/themed';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useLocalSearchParams } from 'expo-router';
@@ -106,13 +106,9 @@ export function SchoolFormScreen() {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={{ flex: 1 }}
     >
-      <ScrollView contentContainerStyle={{ paddingTop: insets.top }}>
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="handled">
         <Box flex={1} p="$6" bg={colors.bgColor}>
           <VStack space="xl">
-            <Heading size="xl" color={colors.textColor}>
-              {mode === 'create' ? 'Nova Escola' : 'Editar Escola'}
-            </Heading>
-
             <SchoolFormFields
               name={name}
               address={address}

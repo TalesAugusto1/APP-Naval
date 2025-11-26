@@ -19,7 +19,12 @@ const mockUsers = [
   },
 ];
 
-const sessions = new Map<string, string>();
+// Helper function to extract user ID from token
+function getUserIdFromToken(token: string): string | null {
+  // Token format: token_{userId}_{timestamp}
+  const match = token.match(/^token_([^_]+)_\d+$/);
+  return match ? match[1] : null;
+}
 
 export function makeServer({ environment = 'development' } = {}) {
   return createServer({
@@ -219,7 +224,6 @@ export function makeServer({ environment = 'development' } = {}) {
         }
 
         const token = `token_${user.id}_${Date.now()}`;
-        sessions.set(token, user.id);
 
         const { password: _, ...userData } = user.attrs;
         return { user: userData, token };
@@ -243,7 +247,6 @@ export function makeServer({ environment = 'development' } = {}) {
         });
 
         const token = `token_${newUser.id}_${Date.now()}`;
-        sessions.set(token, newUser.id);
 
         const { password: _, ...userData } = newUser.attrs;
         return new Response(201, {}, { user: userData, token });
@@ -266,12 +269,17 @@ export function makeServer({ environment = 'development' } = {}) {
         const authHeader = request.requestHeaders.Authorization;
         const token = authHeader?.replace('Bearer ', '');
 
-        if (!token || !sessions.has(token)) {
-          return new Response(401, {}, { error: 'Token inválido ou expirado' });
+        if (!token) {
+          return new Response(401, {}, { error: 'Token não fornecido' });
         }
 
-        const userId = sessions.get(token);
-        const user: any = schema.find('user', userId!);
+        const userId = getUserIdFromToken(token);
+
+        if (!userId) {
+          return new Response(401, {}, { error: 'Token inválido' });
+        }
+
+        const user: any = schema.find('user', userId);
 
         if (!user) {
           return new Response(404, {}, { error: 'Usuário não encontrado' });
@@ -281,14 +289,9 @@ export function makeServer({ environment = 'development' } = {}) {
         return { data: userData };
       });
 
-      this.post('/auth/logout', (schema, request) => {
-        const authHeader = request.requestHeaders.Authorization;
-        const token = authHeader?.replace('Bearer ', '');
-
-        if (token) {
-          sessions.delete(token);
-        }
-
+      this.post('/auth/logout', () => {
+        // For mock server, we don't need to track sessions
+        // Just return success - actual cleanup happens in client
         return { message: 'Logout realizado com sucesso' };
       });
 

@@ -137,7 +137,7 @@ export function ClassFormScreen() {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={{ flex: 1 }}
     >
-      <ScrollView contentContainerStyle={{ paddingTop: insets.top }}>
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="handled">
         <Box flex={1} p="$6" bg={colors.bgColor}>
           <VStack space="xl">
             <ClassFormFields
