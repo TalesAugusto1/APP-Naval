@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
+import * as SystemUI from 'expo-system-ui';
 import 'react-native-reanimated';
 import { GluestackUIProvider } from '@gluestack-ui/themed';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -31,6 +32,11 @@ export default function RootLayout() {
     loadSession();
   }, [loadSession]);
 
+  useEffect(() => {
+    // Set system UI background to transparent
+    SystemUI.setBackgroundColorAsync('transparent');
+  }, []);
+
   return (
     <SafeAreaProvider>
       <GluestackUIProvider config={config} colorMode={colorScheme}>
@@ -45,7 +51,11 @@ export default function RootLayout() {
               <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
             </Stack>
             <ToastContainer />
-            <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
+            <StatusBar
+              style={colorScheme === 'dark' ? 'light' : 'dark'}
+              translucent={true}
+              backgroundColor="transparent"
+            />
           </ThemeProvider>
         </ErrorBoundary>
       </GluestackUIProvider>
