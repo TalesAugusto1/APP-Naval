@@ -1,6 +1,10 @@
-# School Manager 📱
+# 🏫 Gestor Escolar (School Manager)
 
 Modern React Native mobile application for managing public schools and their classes. Built with Expo, TypeScript, and professional quality gates.
+
+<p align="center">
+  <img src="./assets/images/logo.png" alt="Gestor Escolar Logo" width="200" />
+</p>
 
 > **Technical Challenge**: React Native + Expo application with complete CRUD operations, state management, and production-ready quality standards.
 

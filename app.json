@@ -1,8 +1,9 @@
 {
   "expo": {
-    "name": "School-Manager",
+    "name": "Gestor Escolar",
     "slug": "School-Manager",
     "version": "1.0.0",
+    "description": "Sistema de gestão de escolas públicas municipais",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "schoolmanager",
@@ -15,7 +16,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
+        "backgroundColor": "#F5F5DC",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
         "backgroundImage": "./assets/images/android-icon-background.png",
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
@@ -50,7 +51,7 @@
           "image": "./assets/images/splash-icon.png",
           "imageWidth": 200,
           "resizeMode": "contain",
-          "backgroundColor": "#ffffff",
+          "backgroundColor": "#F5F5DC",
           "dark": {
             "backgroundColor": "#000000"
           }
