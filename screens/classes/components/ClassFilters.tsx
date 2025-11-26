@@ -23,6 +23,7 @@ import {
   Pressable,
 } from '@gluestack-ui/themed';
 import { Shift } from '@/types';
+import { SlidersHorizontal } from 'lucide-react-native';
 
 const SHIFT_LABELS = {
   [Shift.MORNING]: 'Manhã',
@@ -79,7 +80,7 @@ export function ClassFilters({
           borderWidth={1}
           borderColor="$borderLight300"
         >
-          <Text>🔽</Text>
+          <SlidersHorizontal size={16} color="#2196F3" />
           <Text>Filtros</Text>
           {activeFilterCount > 0 && (
             <Badge variant="solid" action="info" borderRadius="$full" size="sm">

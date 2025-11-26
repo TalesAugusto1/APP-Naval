@@ -18,6 +18,23 @@ export const lightColors = {
   warning: '#FF9800',
   error: '#F44336',
   info: '#2196F3',
+
+  blue50: '#eff6ff',
+  blue600: '#2563eb',
+  green50: '#f0fdf4',
+  green600: '#16a34a',
+  amber50: '#fffbeb',
+  amber700: '#b45309',
+  orange50: '#fff7ed',
+  orange700: '#c2410c',
+  indigo50: '#eef2ff',
+  indigo700: '#4338ca',
+  gray50: '#f9fafb',
+  gray100: '#f3f4f6',
+  gray400: '#9ca3af',
+  gray500: '#6b7280',
+  gray600: '#4b5563',
+  gray900: '#111827',
 };
 
 export const darkColors = {
@@ -40,6 +57,23 @@ export const darkColors = {
   warning: '#FFA726',
   error: '#EF5350',
   info: '#42A5F5',
+
+  blue50: '#1e3a5f',
+  blue600: '#60a5fa',
+  green50: '#1a3a2e',
+  green600: '#4ade80',
+  amber50: '#3a2e1a',
+  amber700: '#fbbf24',
+  orange50: '#3a2419',
+  orange700: '#fb923c',
+  indigo50: '#2e2a4a',
+  indigo700: '#818cf8',
+  gray50: '#18181b',
+  gray100: '#27272a',
+  gray400: '#a1a1aa',
+  gray500: '#71717a',
+  gray600: '#52525b',
+  gray900: '#fafafa',
 };
 
 export type ColorTheme = typeof lightColors;

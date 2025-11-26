@@ -7,7 +7,9 @@ import {
   FormControlErrorText,
   Input,
   InputField,
+  HStack,
 } from '@gluestack-ui/themed';
+import { Building, MapPin } from 'lucide-react-native';
 
 interface SchoolFormFieldsProps {
   name: string;
@@ -29,12 +31,22 @@ export function SchoolFormFields({
   onBlurAddress,
 }: SchoolFormFieldsProps) {
   return (
-    <VStack space="lg">
+    <VStack space="xl">
       <FormControl isInvalid={!!errors.name} isRequired>
         <FormControlLabel>
-          <FormControlLabelText>Nome da Escola</FormControlLabelText>
+          <HStack space="xs" alignItems="center">
+            <Building size={16} color="#4b5563" />
+            <FormControlLabelText fontWeight="$semibold" color="$gray900">
+              Nome da Escola
+            </FormControlLabelText>
+          </HStack>
         </FormControlLabel>
-        <Input>
+        <Input
+          borderRadius="$lg"
+          borderWidth={1}
+          borderColor={errors.name ? '$error500' : '$gray100'}
+          bg="$white"
+        >
           <InputField
             placeholder="Ex: Escola Municipal José de Alencar"
             value={name}
@@ -51,9 +63,19 @@ export function SchoolFormFields({
 
       <FormControl isInvalid={!!errors.address} isRequired>
         <FormControlLabel>
-          <FormControlLabelText>Endereço</FormControlLabelText>
+          <HStack space="xs" alignItems="center">
+            <MapPin size={16} color="#4b5563" />
+            <FormControlLabelText fontWeight="$semibold" color="$gray900">
+              Endereço
+            </FormControlLabelText>
+          </HStack>
         </FormControlLabel>
-        <Input>
+        <Input
+          borderRadius="$lg"
+          borderWidth={1}
+          borderColor={errors.address ? '$error500' : '$gray100'}
+          bg="$white"
+        >
           <InputField
             placeholder="Ex: Rua das Flores, 123 - Centro"
             value={address}

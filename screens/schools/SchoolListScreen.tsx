@@ -9,6 +9,7 @@ import { SchoolSearchBar } from './components/SchoolSearchBar';
 import { SchoolSearchResults } from './components/SchoolSearchResults';
 import { SchoolFilters } from './components/SchoolFilters';
 import { SchoolCardSkeleton } from '@/components/SkeletonCard';
+import { Plus } from 'lucide-react-native';
 
 type SortOption = 'name' | 'newest' | 'classes';
 
@@ -119,11 +120,16 @@ export function SchoolListScreen() {
         onPress={navigateToCreateSchool}
         bg="$primary500"
         $hover-bg="$primary600"
+        style={{
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 4 },
+          shadowOpacity: 0.15,
+          shadowRadius: 12,
+          elevation: 5,
+        }}
       >
         <FabIcon>
-          <Text color="$white" fontSize={24}>
-            +
-          </Text>
+          <Plus size={24} color="white" />
         </FabIcon>
       </Fab>
     </Box>

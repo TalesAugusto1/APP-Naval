@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Input, InputField, InputSlot, Spinner, Text, Pressable } from '@gluestack-ui/themed';
+import { Input, InputField, InputSlot, Spinner, Pressable } from '@gluestack-ui/themed';
 import { useSchoolStore } from '@/store';
+import { Search, X } from 'lucide-react-native';
 
 export function SchoolSearchBar() {
   const { searchQuery, setSearchQuery } = useSchoolStore();
@@ -26,9 +27,22 @@ export function SchoolSearchBar() {
   };
 
   return (
-    <Input variant="outline" size="lg">
-      <InputSlot pl="$3">
-        <Text fontSize={18}>🔍</Text>
+    <Input
+      variant="outline"
+      size="lg"
+      borderRadius="$2xl"
+      borderColor="$gray100"
+      bg="$white"
+      style={{
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.05,
+        shadowRadius: 4,
+        elevation: 1,
+      }}
+    >
+      <InputSlot pl="$4">
+        <Search size={20} color="#6b7280" />
       </InputSlot>
       <InputField
         placeholder="Buscar escolas…"
@@ -37,16 +51,14 @@ export function SchoolSearchBar() {
         returnKeyType="search"
       />
       {isSearching && (
-        <InputSlot pr="$3">
+        <InputSlot pr="$4">
           <Spinner size="small" />
         </InputSlot>
       )}
       {localValue.length > 0 && !isSearching && (
         <Pressable onPress={handleClear}>
-          <InputSlot pr="$3">
-            <Text fontSize={20} color="$textLight500">
-              ✕
-            </Text>
+          <InputSlot pr="$4">
+            <X size={20} color="#6b7280" />
           </InputSlot>
         </Pressable>
       )}
