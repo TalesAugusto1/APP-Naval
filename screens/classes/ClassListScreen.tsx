@@ -9,7 +9,6 @@ import {
   Text,
   Button,
   ButtonText,
-  Spinner,
   Heading,
 } from '@gluestack-ui/themed';
 import { useLocalSearchParams } from 'expo-router';
@@ -20,6 +19,7 @@ import { ClassListEmpty } from './components/ClassListEmpty';
 import { ClassSearchBar } from './components/ClassSearchBar';
 import { ClassFilters } from './components/ClassFilters';
 import { Shift } from '@/types';
+import { ClassCardSkeleton } from '@/components/SkeletonCard';
 
 export function ClassListScreen() {
   const { schoolId } = useLocalSearchParams<{ schoolId?: string }>();
@@ -92,8 +92,30 @@ export function ClassListScreen() {
 
   if (isLoading && classes.length === 0) {
     return (
-      <Box flex={1} bg="$backgroundLight50" justifyContent="center" alignItems="center">
-        <Spinner size="large" />
+      <Box flex={1} bg="$backgroundLight50">
+        <VStack flex={1} p="$4" space="md">
+          {schoolName && (
+            <Heading size="lg" mb="$2">
+              Turmas - {schoolName}
+            </Heading>
+          )}
+          <HStack space="sm">
+            <Box flex={1}>
+              <ClassSearchBar value={searchQuery} onChangeText={setSearchQuery} />
+            </Box>
+            <ClassFilters
+              selectedShifts={selectedShifts}
+              selectedYears={selectedYears}
+              availableYears={availableYears}
+              onShiftsChange={setSelectedShifts}
+              onYearsChange={setSelectedYears}
+              onClearFilters={handleClearFilters}
+            />
+          </HStack>
+          {[...Array(5)].map((_, index) => (
+            <ClassCardSkeleton key={index} />
+          ))}
+        </VStack>
       </Box>
     );
   }
