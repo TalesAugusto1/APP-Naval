@@ -202,7 +202,7 @@ export function SettingsScreen() {
                   Desenvolvido com
                 </Text>
                 <Text size="md" fontWeight="$semibold" color="$gray900">
-                  ❤️ React Native + Expo
+                  React Native + Expo
                 </Text>
               </HStack>
             </VStack>

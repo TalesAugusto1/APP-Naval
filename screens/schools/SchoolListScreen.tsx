@@ -123,7 +123,7 @@ export function SchoolListScreen() {
             data={sortedSchools}
             renderItem={({ item }) => <SchoolCard school={item} />}
             keyExtractor={(item) => item.id}
-            contentContainerStyle={{ paddingBottom: 80 }}
+            contentContainerStyle={{ paddingBottom: 80 + insets.bottom }}
             refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />}
           />
         )}
@@ -145,6 +145,7 @@ export function SchoolListScreen() {
           shadowOpacity: 0.15,
           shadowRadius: 12,
           elevation: 5,
+          marginBottom: insets.bottom > 0 ? insets.bottom + 8 : 8,
         }}
       >
         <FabIcon>
