@@ -1,6 +1,7 @@
 import { VStack, Text, HStack, Box } from '@gluestack-ui/themed';
 import { PieChart } from 'react-native-chart-kit';
 import { Dimensions } from 'react-native';
+import { useThemeColors } from '@/hooks/useThemeColors';
 import { Class, Shift } from '@/types';
 
 interface ShiftPieChartProps {
@@ -20,6 +21,7 @@ const SHIFT_COLORS = {
 };
 
 export function ShiftPieChart({ classes }: ShiftPieChartProps) {
+  const colors = useThemeColors();
   const shiftCounts = classes.reduce(
     (acc, classItem) => {
       acc[classItem.shift] = (acc[classItem.shift] || 0) + 1;
@@ -39,7 +41,7 @@ export function ShiftPieChart({ classes }: ShiftPieChartProps) {
   if (classes.length === 0) {
     return (
       <VStack p="$6" alignItems="center">
-        <Text color="$gray500">Nenhuma turma cadastrada</Text>
+        <Text color={colors.textSecondary}>Nenhuma turma cadastrada</Text>
       </VStack>
     );
   }
@@ -66,11 +68,11 @@ export function ShiftPieChart({ classes }: ShiftPieChartProps) {
           <HStack key={item.name} justifyContent="space-between" alignItems="center">
             <HStack space="sm" alignItems="center">
               <Box width={16} height={16} bg={item.color} borderRadius="$sm" />
-              <Text size="sm" color="$gray600">
+              <Text size="sm" color={colors.textSecondary}>
                 {item.name}
               </Text>
             </HStack>
-            <Text size="sm" fontWeight="$bold" color="$gray900">
+            <Text size="sm" fontWeight="$bold" color={colors.textColor}>
               {item.population} {item.population === 1 ? 'turma' : 'turmas'}
             </Text>
           </HStack>

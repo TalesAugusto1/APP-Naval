@@ -1,5 +1,6 @@
 import { Heading, HStack, Pressable } from '@gluestack-ui/themed';
 import { School } from '@/types';
+import { useThemeColors } from '@/hooks/useThemeColors';
 import { navigateToEditSchool, goBack } from '@/navigation';
 import { ArrowLeft, Edit } from 'lucide-react-native';
 import { useProtectedAction } from '@/hooks/useProtectedAction';
@@ -9,6 +10,7 @@ interface SchoolHeaderProps {
 }
 
 export function SchoolHeader({ school }: SchoolHeaderProps) {
+  const colors = useThemeColors();
   const handleEdit = useProtectedAction(async () => {
     navigateToEditSchool(school.id);
   });
@@ -24,12 +26,12 @@ export function SchoolHeader({ school }: SchoolHeaderProps) {
         borderRadius="$xl"
         style={({ pressed }) => ({
           opacity: pressed ? 0.6 : 1,
-          backgroundColor: pressed ? '#f3f4f6' : 'transparent',
+          backgroundColor: pressed ? colors.pressedBg : 'transparent',
         })}
       >
-        <ArrowLeft size={20} color="#374151" />
+        <ArrowLeft size={20} color={colors.iconPrimary} />
       </Pressable>
-      <Heading size="lg" color="$gray900" flex={1}>
+      <Heading size="lg" color={colors.textColor} flex={1}>
         {school.name}
       </Heading>
       <Pressable
@@ -41,10 +43,10 @@ export function SchoolHeader({ school }: SchoolHeaderProps) {
         borderRadius="$xl"
         style={({ pressed }) => ({
           opacity: pressed ? 0.6 : 1,
-          backgroundColor: pressed ? '#f3f4f6' : 'transparent',
+          backgroundColor: pressed ? colors.pressedBg : 'transparent',
         })}
       >
-        <Edit size={20} color="#374151" />
+        <Edit size={20} color={colors.iconPrimary} />
       </Pressable>
     </HStack>
   );

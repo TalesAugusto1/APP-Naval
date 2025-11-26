@@ -2,6 +2,7 @@ import { VStack, Text, Button, ButtonText, ButtonIcon, Box, HStack } from '@glue
 import { useEffect } from 'react';
 import { FlatList, Pressable } from 'react-native';
 import { useClassStore } from '@/store';
+import { useThemeColors } from '@/hooks/useThemeColors';
 import { navigateToCreateClass, navigateToEditClass, navigateToSchoolClasses } from '@/navigation';
 import { Shift } from '@/types';
 import { Plus, BookOpen, Clock, Calendar } from 'lucide-react-native';
@@ -33,6 +34,7 @@ const SHIFT_CONFIG = {
 
 export function SchoolClassesList({ schoolId }: SchoolClassesListProps) {
   const { classes, fetchClasses, isLoading } = useClassStore();
+  const colors = useThemeColors();
 
   useEffect(() => {
     fetchClasses(schoolId);
@@ -43,7 +45,7 @@ export function SchoolClassesList({ schoolId }: SchoolClassesListProps) {
   if (schoolClasses.length === 0 && !isLoading) {
     return (
       <VStack space="md" p="$6" alignItems="center">
-        <Text size="lg" color="$textLight600" textAlign="center">
+        <Text size="lg" color={colors.textTertiary} textAlign="center">
           Esta escola não possui turmas cadastradas
         </Text>
         <Button onPress={() => navigateToCreateClass(schoolId)}>
@@ -57,7 +59,7 @@ export function SchoolClassesList({ schoolId }: SchoolClassesListProps) {
   return (
     <VStack space="md" w="$full">
       <HStack justifyContent="space-between" alignItems="center" mb="$2">
-        <Text color="$gray600">
+        <Text color={colors.textSecondary}>
           {schoolClasses.length} turma{schoolClasses.length !== 1 ? 's' : ''}
         </Text>
         <Button
@@ -82,12 +84,12 @@ export function SchoolClassesList({ schoolId }: SchoolClassesListProps) {
             >
               {({ pressed }) => (
                 <Box
-                  bg="$white"
+                  bg={colors.cardBg}
                   p="$4"
                   borderRadius="$2xl"
                   mb="$3"
                   borderWidth={1}
-                  borderColor="$gray100"
+                  borderColor={colors.borderColor}
                   w="$full"
                   style={{
                     transform: [{ scale: pressed ? 0.98 : 1 }],
@@ -110,7 +112,7 @@ export function SchoolClassesList({ schoolId }: SchoolClassesListProps) {
                       <BookOpen size={24} color="#16a34a" />
                     </Box>
                     <VStack flex={1}>
-                      <Text fontSize="$lg" fontWeight="$semibold" color="$gray900" mb="$1">
+                      <Text fontSize="$lg" fontWeight="$semibold" color={colors.textColor} mb="$1">
                         {item.name}
                       </Text>
                     </VStack>
@@ -121,11 +123,11 @@ export function SchoolClassesList({ schoolId }: SchoolClassesListProps) {
                     mt="$3"
                     pt="$3"
                     borderTopWidth={1}
-                    borderTopColor="$gray100"
+                    borderTopColor={colors.dividerColor}
                     flexWrap="wrap"
                   >
                     <HStack space="xs" alignItems="center">
-                      <Clock size={16} color="#9ca3af" />
+                      <Clock size={16} color={colors.iconTertiary} />
                       <Box
                         bg={shiftInfo.bgColor}
                         borderRadius="$full"
@@ -140,8 +142,8 @@ export function SchoolClassesList({ schoolId }: SchoolClassesListProps) {
                       </Box>
                     </HStack>
                     <HStack space="xs" alignItems="center">
-                      <Calendar size={16} color="#9ca3af" />
-                      <Text fontSize="$sm" color="$gray600">
+                      <Calendar size={16} color={colors.iconTertiary} />
+                      <Text fontSize="$sm" color={colors.textSecondary}>
                         {item.schoolYear}
                       </Text>
                     </HStack>

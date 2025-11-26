@@ -1,8 +1,10 @@
 import { Text, HStack } from '@gluestack-ui/themed';
 import { useSchoolStore } from '@/store';
+import { useThemeColors } from '@/hooks/useThemeColors';
 
 export function SchoolSearchResults() {
   const { schools, searchQuery, isLoading } = useSchoolStore();
+  const colors = useThemeColors();
 
   if (isLoading || !searchQuery) {
     return null;
@@ -12,7 +14,7 @@ export function SchoolSearchResults() {
 
   return (
     <HStack p="$2" justifyContent="center">
-      <Text size="sm" color="$textLight600">
+      <Text size="sm" color={colors.textTertiary}>
         {count === 0
           ? `Nenhum resultado para "${searchQuery}"`
           : count === 1

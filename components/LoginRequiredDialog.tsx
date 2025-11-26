@@ -16,11 +16,13 @@ import {
   CloseIcon,
 } from '@gluestack-ui/themed';
 import { Lock } from 'lucide-react-native';
+import { useThemeColors } from '@/hooks/useThemeColors';
 import { useUIStore } from '@/store';
 import { navigateToLogin, navigateToRegister } from '@/navigation';
 
 export function LoginRequiredDialog() {
   const { loginRequiredModalOpen, hideLoginRequired } = useUIStore();
+  const colors = useThemeColors();
 
   const handleLogin = () => {
     hideLoginRequired();
@@ -45,10 +47,10 @@ export function LoginRequiredDialog() {
         <ModalBody>
           <VStack space="md" alignItems="center" py="$4">
             <Lock size={48} color="#2196F3" />
-            <Text size="md" textAlign="center" color="$gray600">
+            <Text size="md" textAlign="center" color={colors.textSecondary}>
               Você precisa estar autenticado para realizar esta ação.
             </Text>
-            <Text size="sm" textAlign="center" color="$gray500">
+            <Text size="sm" textAlign="center" color={colors.textTertiary}>
               Faça login ou crie uma conta para gerenciar escolas e turmas.
             </Text>
           </VStack>

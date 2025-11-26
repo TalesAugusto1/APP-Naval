@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { Animated } from 'react-native';
 import { Box } from '@gluestack-ui/themed';
+import { useThemeColors } from '@/hooks/useThemeColors';
 
 interface SkeletonBoxProps {
   width?: number | string;
@@ -9,6 +10,7 @@ interface SkeletonBoxProps {
 }
 
 export function SkeletonBox({ width = '$full', height, borderRadius = '$sm' }: SkeletonBoxProps) {
+  const colors = useThemeColors();
   const opacity = useRef(new Animated.Value(0.3)).current;
 
   useEffect(() => {
@@ -30,12 +32,7 @@ export function SkeletonBox({ width = '$full', height, borderRadius = '$sm' }: S
 
   return (
     <Animated.View style={{ opacity }}>
-      <Box
-        width={width as any}
-        height={height}
-        bg="$backgroundLight200"
-        borderRadius={borderRadius}
-      />
+      <Box width={width as any} height={height} bg={colors.surfaceBg} borderRadius={borderRadius} />
     </Animated.View>
   );
 }

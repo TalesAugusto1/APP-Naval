@@ -4,6 +4,7 @@ import { Box, VStack, Heading, Text, Pressable, HStack } from '@gluestack-ui/the
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAuthStore } from '@/store/useAuthStore';
 import { useUIStore } from '@/store/useUIStore';
+import { useColorScheme } from '@/hooks/use-color-scheme';
 import { AuthInput } from './components/AuthInput';
 import { AuthButton } from './components/AuthButton';
 import { Mail, ArrowLeft } from 'lucide-react-native';
@@ -16,7 +17,13 @@ export function ForgotPasswordScreen() {
 
   const { forgotPassword, isLoading } = useAuthStore();
   const { showToast } = useUIStore();
+  const colorScheme = useColorScheme();
   const insets = useSafeAreaInsets();
+
+  const isDark = colorScheme === 'dark';
+  const bgColor = isDark ? '#0a0a0a' : '#fafafa';
+  const textColor = isDark ? '$textDark50' : '$textLight900';
+  const textSecondaryColor = isDark ? '$textDark400' : '$textLight500';
 
   const validate = () => {
     if (!email.trim()) {
@@ -49,8 +56,7 @@ export function ForgotPasswordScreen() {
         flex={1}
         p="$6"
         justifyContent="center"
-        bg="$backgroundLight50"
-        style={{ paddingTop: insets.top }}
+        style={{ paddingTop: insets.top, backgroundColor: bgColor }}
       >
         <VStack space="2xl" maxWidth={400} width="$full" alignSelf="center">
           <VStack space="md" alignItems="center">
@@ -68,10 +74,10 @@ export function ForgotPasswordScreen() {
             >
               <Mail size={40} color="#16a34a" />
             </Box>
-            <Heading size="2xl" color="$gray900" textAlign="center">
+            <Heading size="2xl" color={textColor} textAlign="center">
               Email Enviado!
             </Heading>
-            <Text size="md" color="$gray600" textAlign="center">
+            <Text size="md" color={textSecondaryColor} textAlign="center">
               Enviamos instruções para recuperação de senha para {email}
             </Text>
           </VStack>
@@ -105,7 +111,7 @@ export function ForgotPasswordScreen() {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
       <ScrollView
-        style={{ flex: 1, backgroundColor: '#fafafa' }}
+        style={{ flex: 1, backgroundColor: bgColor }}
         contentContainerStyle={{ flexGrow: 1, paddingTop: insets.top }}
         keyboardShouldPersistTaps="handled"
       >
@@ -119,16 +125,16 @@ export function ForgotPasswordScreen() {
                 accessibilityLabel="Voltar"
               >
                 <HStack space="xs" alignItems="center" mb="$2">
-                  <ArrowLeft size={20} color="#6b7280" />
-                  <Text size="sm" color="$gray600">
+                  <ArrowLeft size={20} color={isDark ? '#9ca3af' : '#6b7280'} />
+                  <Text size="sm" color={textSecondaryColor}>
                     Voltar
                   </Text>
                 </HStack>
               </Pressable>
-              <Heading size="3xl" color="$gray900">
+              <Heading size="3xl" color={textColor}>
                 Esqueceu a Senha?
               </Heading>
-              <Text size="lg" color="$gray600">
+              <Text size="lg" color={textSecondaryColor}>
                 Digite seu email para receber instruções de recuperação
               </Text>
             </VStack>

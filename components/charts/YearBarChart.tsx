@@ -1,6 +1,7 @@
 import { VStack, Text } from '@gluestack-ui/themed';
 import { BarChart } from 'react-native-chart-kit';
 import { Dimensions } from 'react-native';
+import { useThemeColors } from '@/hooks/useThemeColors';
 import { Class } from '@/types';
 
 interface YearBarChartProps {
@@ -8,6 +9,7 @@ interface YearBarChartProps {
 }
 
 export function YearBarChart({ classes }: YearBarChartProps) {
+  const colors = useThemeColors();
   const yearCounts = classes.reduce(
     (acc, classItem) => {
       const year = classItem.schoolYear.toString();
@@ -23,7 +25,7 @@ export function YearBarChart({ classes }: YearBarChartProps) {
   if (classes.length === 0) {
     return (
       <VStack p="$6" alignItems="center">
-        <Text color="$gray500">Nenhuma turma cadastrada</Text>
+        <Text color={colors.textSecondary}>Nenhuma turma cadastrada</Text>
       </VStack>
     );
   }

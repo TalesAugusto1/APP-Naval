@@ -14,6 +14,7 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useLocalSearchParams } from 'expo-router';
 import { useSchoolStore } from '@/store';
+import { useThemeColors } from '@/hooks/useThemeColors';
 import { goBack } from '@/navigation';
 import { SchoolHeader } from './components/SchoolHeader';
 import { SchoolStats } from './components/SchoolStats';
@@ -26,6 +27,7 @@ type TabType = 'overview' | 'classes';
 export function SchoolDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { selectedSchool, fetchSchoolById, isLoading, error } = useSchoolStore();
+  const colors = useThemeColors();
   const [activeTab, setActiveTab] = useState<TabType>('classes');
   const insets = useSafeAreaInsets();
 
@@ -41,7 +43,7 @@ export function SchoolDetailScreen() {
         flex={1}
         justifyContent="center"
         alignItems="center"
-        bg="$backgroundLight50"
+        bg={colors.bgColor}
         style={{ paddingTop: insets.top }}
       >
         <Spinner size="large" />
@@ -56,7 +58,7 @@ export function SchoolDetailScreen() {
         justifyContent="center"
         alignItems="center"
         p="$8"
-        bg="$backgroundLight50"
+        bg={colors.bgColor}
         style={{ paddingTop: insets.top }}
       >
         <Text size="lg" color="$error500" textAlign="center" mb="$4">
@@ -70,14 +72,21 @@ export function SchoolDetailScreen() {
   }
 
   return (
-    <Box flex={1} bg="#f9fafb" style={{ paddingTop: insets.top }}>
+    <Box flex={1} style={{ backgroundColor: colors.bgColorHex, paddingTop: insets.top }}>
       {/* Header Section */}
-      <Box bg="$white" borderBottomWidth={1} borderBottomColor="$gray200" px="$6" pt="$6" pb="$4">
+      <Box
+        bg={colors.cardBg}
+        borderBottomWidth={1}
+        borderBottomColor={colors.borderColor}
+        px="$6"
+        pt="$6"
+        pb="$4"
+      >
         <SchoolHeader school={selectedSchool} />
 
         <HStack space="xs" alignItems="flex-start" mb="$4">
-          <MapPin size={16} color="#9ca3af" style={{ marginTop: 2 }} />
-          <Text color="$gray600">{selectedSchool.address}</Text>
+          <MapPin size={16} color={colors.iconSecondary} style={{ marginTop: 2 }} />
+          <Text color={colors.textSecondary}>{selectedSchool.address}</Text>
         </HStack>
 
         <SchoolStats classCount={selectedSchool.classCount} />
@@ -90,15 +99,15 @@ export function SchoolDetailScreen() {
                 py="$2"
                 px="$4"
                 borderRadius="$xl"
-                bg={activeTab === 'overview' ? '#2563eb' : '#f3f4f6'}
                 style={{
+                  backgroundColor: activeTab === 'overview' ? '#2563eb' : colors.surfaceBg,
                   opacity: pressed ? 0.8 : 1,
                 }}
               >
                 <Text
                   textAlign="center"
                   fontWeight="$medium"
-                  color={activeTab === 'overview' ? 'white' : '$gray600'}
+                  color={activeTab === 'overview' ? 'white' : colors.textSecondary}
                 >
                   Visão Geral
                 </Text>
@@ -111,15 +120,15 @@ export function SchoolDetailScreen() {
                 py="$2"
                 px="$4"
                 borderRadius="$xl"
-                bg={activeTab === 'classes' ? '#2563eb' : '#f3f4f6'}
                 style={{
+                  backgroundColor: activeTab === 'classes' ? '#2563eb' : colors.surfaceBg,
                   opacity: pressed ? 0.8 : 1,
                 }}
               >
                 <Text
                   textAlign="center"
                   fontWeight="$medium"
-                  color={activeTab === 'classes' ? 'white' : '$gray600'}
+                  color={activeTab === 'classes' ? 'white' : colors.textSecondary}
                 >
                   Turmas
                 </Text>
@@ -133,27 +142,27 @@ export function SchoolDetailScreen() {
       <ScrollView style={{ flex: 1 }}>
         {activeTab === 'overview' ? (
           <Box px="$6" py="$6">
-            <Box bg="$white" borderRadius="$2xl" p="$6">
+            <Box bg={colors.cardBg} borderRadius="$2xl" p="$6">
               <VStack space="md">
                 <VStack>
-                  <Text color="$gray500" mb="$1">
+                  <Text color={colors.textSecondary} mb="$1">
                     Nome da Escola
                   </Text>
-                  <Text color="$gray900">{selectedSchool.name}</Text>
+                  <Text color={colors.textColor}>{selectedSchool.name}</Text>
                 </VStack>
-                <Divider bg="$gray100" />
+                <Divider bg={colors.dividerColor} />
                 <VStack>
-                  <Text color="$gray500" mb="$1">
+                  <Text color={colors.textSecondary} mb="$1">
                     Endereço
                   </Text>
-                  <Text color="$gray900">{selectedSchool.address}</Text>
+                  <Text color={colors.textColor}>{selectedSchool.address}</Text>
                 </VStack>
-                <Divider bg="$gray100" />
+                <Divider bg={colors.dividerColor} />
                 <VStack>
-                  <Text color="$gray500" mb="$1">
+                  <Text color={colors.textSecondary} mb="$1">
                     Número de Turmas
                   </Text>
-                  <Text color="$gray900">
+                  <Text color={colors.textColor}>
                     {selectedSchool.classCount} turma{selectedSchool.classCount !== 1 ? 's' : ''}
                   </Text>
                 </VStack>

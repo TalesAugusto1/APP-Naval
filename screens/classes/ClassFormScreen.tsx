@@ -17,6 +17,7 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useLocalSearchParams } from 'expo-router';
 import { useClassStore, useSchoolStore, useUIStore } from '@/store';
+import { useThemeColors } from '@/hooks/useThemeColors';
 import { validateCreateClass } from '@/services';
 import { goBack } from '@/navigation';
 import { ClassFormFields } from './components/ClassFormFields';
@@ -32,6 +33,7 @@ export function ClassFormScreen() {
     useClassStore();
   const { schools, fetchSchools } = useSchoolStore();
   const { showToast } = useUIStore();
+  const colors = useThemeColors();
   const insets = useSafeAreaInsets();
 
   const currentYear = new Date().getFullYear();
@@ -136,7 +138,7 @@ export function ClassFormScreen() {
       style={{ flex: 1 }}
     >
       <ScrollView contentContainerStyle={{ paddingTop: insets.top }}>
-        <Box flex={1} p="$6" bg="$white">
+        <Box flex={1} p="$6" bg={colors.bgColor}>
           <VStack space="xl">
             <ClassFormFields
               name={name}

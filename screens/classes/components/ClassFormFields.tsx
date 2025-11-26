@@ -20,6 +20,7 @@ import {
   Icon,
   ChevronDownIcon,
 } from '@gluestack-ui/themed';
+import { useThemeColors } from '@/hooks/useThemeColors';
 import { Shift, School } from '@/types';
 
 const SHIFT_LABELS = {
@@ -59,12 +60,14 @@ export function ClassFormFields({
   onBlurSchoolYear,
   showSchoolSelector = false,
 }: ClassFormFieldsProps) {
+  const colors = useThemeColors();
+
   return (
     <VStack space="lg">
       {/* School Field - Always First */}
       <FormControl isRequired isInvalid={!!errors.schoolId}>
         <FormControlLabel>
-          <FormControlLabelText fontWeight="$medium" color="$gray900">
+          <FormControlLabelText fontWeight="$medium" color={colors.textColor}>
             Escola
           </FormControlLabelText>
         </FormControlLabel>
@@ -80,7 +83,7 @@ export function ClassFormFields({
             size="lg"
             borderRadius="$xl"
             borderColor={errors.schoolId ? '$error500' : '$gray200'}
-            bg="$backgroundLight50"
+            bg={colors.surfaceBg}
           >
             <SelectInput placeholder="Selecione uma escola" />
             <SelectIcon mr="$3" as={ChevronDownIcon} />
@@ -107,7 +110,7 @@ export function ClassFormFields({
       {/* Class Name Field */}
       <FormControl isRequired isInvalid={!!errors.name}>
         <FormControlLabel>
-          <FormControlLabelText fontWeight="$medium" color="$gray900">
+          <FormControlLabelText fontWeight="$medium" color={colors.textColor}>
             Nome da Turma
           </FormControlLabelText>
         </FormControlLabel>
@@ -137,7 +140,7 @@ export function ClassFormFields({
       {/* Shift Field */}
       <FormControl isRequired isInvalid={!!errors.shift}>
         <FormControlLabel>
-          <FormControlLabelText fontWeight="$medium" color="$gray900">
+          <FormControlLabelText fontWeight="$medium" color={colors.textColor}>
             Turno
           </FormControlLabelText>
         </FormControlLabel>
@@ -153,7 +156,7 @@ export function ClassFormFields({
             size="lg"
             borderRadius="$xl"
             borderColor={errors.shift ? '$error500' : '$gray200'}
-            bg="$backgroundLight50"
+            bg={colors.surfaceBg}
           >
             <SelectInput placeholder="Selecione o turno" />
             <SelectIcon mr="$3" as={ChevronDownIcon} />
@@ -180,7 +183,7 @@ export function ClassFormFields({
       {/* School Year Field */}
       <FormControl isRequired isInvalid={!!errors.schoolYear}>
         <FormControlLabel>
-          <FormControlLabelText fontWeight="$medium" color="$gray900">
+          <FormControlLabelText fontWeight="$medium" color={colors.textColor}>
             Ano Letivo
           </FormControlLabelText>
         </FormControlLabel>

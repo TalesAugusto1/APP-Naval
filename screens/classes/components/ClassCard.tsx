@@ -1,6 +1,7 @@
 import { Pressable } from 'react-native';
 import { Box, Heading, Text, Badge, HStack, VStack, Divider } from '@gluestack-ui/themed';
 import { Class, Shift } from '@/types';
+import { useThemeColors } from '@/hooks/useThemeColors';
 import { navigateToEditClass } from '@/navigation';
 import { BookOpen, Clock, Calendar } from 'lucide-react-native';
 import { IconContainer } from '@/components/IconContainer';
@@ -33,6 +34,7 @@ interface ClassCardProps {
 }
 
 export function ClassCard({ classItem, schoolName }: ClassCardProps) {
+  const colors = useThemeColors();
   const shiftInfo = SHIFT_CONFIG[classItem.shift];
   const handlePress = useProtectedAction(async () => {
     navigateToEditClass(classItem.id, classItem.schoolId);
@@ -48,12 +50,12 @@ export function ClassCard({ classItem, schoolName }: ClassCardProps) {
     >
       {({ pressed }) => (
         <Box
-          bg="$white"
+          bg={colors.cardBg}
           borderRadius="$2xl"
           p="$4"
           mb="$3"
           borderWidth={1}
-          borderColor="$gray100"
+          borderColor={colors.borderColor}
           style={{
             transform: [{ scale: pressed ? 0.98 : 1 }],
             shadowColor: '#000',
@@ -66,22 +68,22 @@ export function ClassCard({ classItem, schoolName }: ClassCardProps) {
           <HStack space="md" alignItems="flex-start" mb="$3">
             <IconContainer icon={BookOpen} variant="green" />
             <VStack flex={1} space="xs">
-              <Heading size="md" numberOfLines={1} color="$gray900">
+              <Heading size="md" numberOfLines={1} color={colors.textColor}>
                 {classItem.name}
               </Heading>
               {schoolName && (
-                <Text size="sm" color="$gray500" numberOfLines={1}>
+                <Text size="sm" color={colors.textSecondary} numberOfLines={1}>
                   {schoolName}
                 </Text>
               )}
             </VStack>
           </HStack>
 
-          <Divider bg="$gray100" />
+          <Divider bg={colors.dividerColor} />
 
           <HStack mt="$3" space="md" flexWrap="wrap">
             <HStack space="xs" alignItems="center">
-              <Clock size={16} color="#9ca3af" />
+              <Clock size={16} color={colors.iconTertiary} />
               <Badge
                 variant="outline"
                 borderRadius="$full"
@@ -96,8 +98,8 @@ export function ClassCard({ classItem, schoolName }: ClassCardProps) {
               </Badge>
             </HStack>
             <HStack space="xs" alignItems="center">
-              <Calendar size={16} color="#9ca3af" />
-              <Text size="sm" color="$gray600">
+              <Calendar size={16} color={colors.iconTertiary} />
+              <Text size="sm" color={colors.textSecondary}>
                 {classItem.schoolYear}
               </Text>
             </HStack>

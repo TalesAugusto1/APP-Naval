@@ -16,6 +16,7 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAuthStore } from '@/store/useAuthStore';
 import { useUIStore } from '@/store/useUIStore';
+import { useColorScheme } from '@/hooks/use-color-scheme';
 import { goBack } from '@/navigation';
 import { AuthInput } from './components/AuthInput';
 import { AuthButton } from './components/AuthButton';
@@ -30,7 +31,13 @@ export function LoginScreen() {
 
   const { login, isLoading } = useAuthStore();
   const { showToast } = useUIStore();
+  const colorScheme = useColorScheme();
   const insets = useSafeAreaInsets();
+
+  const isDark = colorScheme === 'dark';
+  const bgColor = isDark ? '#0a0a0a' : '#fafafa';
+  const textColor = isDark ? '$textDark50' : '$textLight900';
+  const textSecondaryColor = isDark ? '$textDark400' : '$textLight500';
 
   const validate = () => {
     const newErrors: { email?: string; password?: string } = {};
@@ -69,17 +76,17 @@ export function LoginScreen() {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
       <ScrollView
-        style={{ flex: 1, backgroundColor: '#fafafa' }}
+        style={{ flex: 1, backgroundColor: bgColor }}
         contentContainerStyle={{ flexGrow: 1, paddingTop: insets.top }}
         keyboardShouldPersistTaps="handled"
       >
         <Box flex={1} p="$6" justifyContent="center">
           <VStack space="2xl" maxWidth={400} width="$full" alignSelf="center">
             <VStack space="md">
-              <Heading size="3xl" color="$gray900">
+              <Heading size="3xl" color={textColor}>
                 Bem-vindo
               </Heading>
-              <Text size="lg" color="$gray600">
+              <Text size="lg" color={textSecondaryColor}>
                 Faça login para gerenciar escolas e turmas
               </Text>
             </VStack>
@@ -149,7 +156,7 @@ export function LoginScreen() {
               />
 
               <HStack justifyContent="center" space="xs">
-                <Text size="sm" color="$gray600">
+                <Text size="sm" color={textSecondaryColor}>
                   Não tem uma conta?
                 </Text>
                 <Pressable

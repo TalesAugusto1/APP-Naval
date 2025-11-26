@@ -2,23 +2,25 @@ import { Tabs } from 'expo-router';
 import React from 'react';
 import { School, Settings } from 'lucide-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useThemeColors } from '@/hooks/useThemeColors';
 
 import { HapticTab } from '@/components/haptic-tab';
 
 export default function TabLayout() {
   const insets = useSafeAreaInsets();
+  const colors = useThemeColors();
 
   return (
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: '#2563eb',
-        tabBarInactiveTintColor: '#9ca3af',
+        tabBarInactiveTintColor: colors.iconTertiary,
         headerShown: false,
         tabBarButton: HapticTab,
         tabBarStyle: {
-          backgroundColor: '#ffffff',
+          backgroundColor: colors.isDark ? '#1a1a1a' : '#ffffff',
           borderTopWidth: 1,
-          borderTopColor: '#e5e7eb',
+          borderTopColor: colors.borderColor,
           paddingBottom: insets.bottom > 0 ? insets.bottom : 8,
           paddingTop: 8,
           height: 65 + (insets.bottom > 0 ? insets.bottom : 0),
