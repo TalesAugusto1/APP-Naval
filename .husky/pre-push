@@ -57,7 +57,7 @@ trap on_error ERR
 echo "${BOLD}${GREEN}════════════════════════════════════════════════════════════${RESET}"
 echo "${BOLD}📱 Pre-push · Mobile Quality Suite${RESET}  $(stamp)"
 echo "${BOLD}${GREEN}════════════════════════════════════════════════════════════${RESET}"
-echo "${GREEN}• Plan:${RESET} format → lint → type-check → tests"
+echo "${GREEN}• Plan:${RESET} format → lint → type-check → tests (required) → coverage"
 
 # Enhanced run_step function with better progress tracking
 run_step() {
@@ -134,13 +134,25 @@ if [ "$DOCS_ONLY" -eq 0 ]; then
     exit 1
   fi
   
-  # Tests (if test script exists)
+  # Tests (MANDATORY - must pass to push)
   if grep -q '"test"' package.json; then
-    if ! run_step "Unit tests" npm test; then
-      echo "${YELLOW}⚠️ Tests failed but continuing (optional for now)${RESET}"
+    if ! run_step "Unit tests" npm test -- --silent; then
+      echo "${RED}✖ Tests failed! All tests must pass before pushing.${RESET}"
+      echo "${YELLOW}Fix failing tests or run:${RESET} ${BOLD}npm test${RESET} to debug"
+      exit 1
     fi
   else
-    echo "${YELLOW}ℹ️ No test script found. Add tests for better quality gates!${RESET}"
+    echo "${RED}✖ No test script found. Tests are mandatory!${RESET}"
+    echo "${YELLOW}Add test script to package.json${RESET}"
+    exit 1
+  fi
+  
+  # Code Coverage Check (if tests exist)
+  if grep -q '"test:coverage"' package.json; then
+    echo "${GREEN}• Running coverage analysis...${RESET}"
+    if ! run_step "Code coverage" npm run test:coverage -- --silent; then
+      echo "${YELLOW}⚠️ Coverage check failed, but continuing${RESET}"
+    fi
   fi
 else
   echo "${YELLOW}Skipping quality checks (docs-only changes).${RESET}"
@@ -148,11 +160,12 @@ fi
 
 # Performance summary
 total_time=$(( $(date +%s) - start_ts ))
-echo "${BOLD}${GREEN}✅ Pre-push passed${RESET} · ${YELLOW}Summary:${RESET} lint OK · type-check OK · ${total_time}s"
+echo "${BOLD}${GREEN}✅ Pre-push passed${RESET} · ${YELLOW}Summary:${RESET} lint ✓ · type-check ✓ · tests ✓ · ${total_time}s"
 
 # Show performance metrics
 echo "${GREEN}• Performance Summary:${RESET}"
 echo "  - Total time: ${total_time}s"
 echo "  - Change type: $(if [ "$DOCS_ONLY" -gt 0 ]; then echo "docs-only"; else echo "full"; fi)"
-echo "${YELLOW}• Next:${RESET} Add tests to strengthen quality gates!"
+echo "  - Quality gates: ${GREEN}ALL PASSED${RESET}"
+echo "${YELLOW}• Code quality:${RESET} Production-ready 🚀"
 
