@@ -99,10 +99,8 @@ export function SchoolDetailScreen() {
                 py="$2"
                 px="$4"
                 borderRadius="$full"
-                style={{
-                  backgroundColor: activeTab === 'overview' ? '#2563eb' : colors.surfaceBg,
-                  opacity: pressed ? 0.8 : 1,
-                }}
+                bg={activeTab === 'overview' ? '#2563eb' : colors.surfaceBg}
+                opacity={pressed ? 0.85 : 1}
               >
                 <Text
                   textAlign="center"
@@ -120,10 +118,8 @@ export function SchoolDetailScreen() {
                 py="$2"
                 px="$4"
                 borderRadius="$full"
-                style={{
-                  backgroundColor: activeTab === 'classes' ? '#2563eb' : colors.surfaceBg,
-                  opacity: pressed ? 0.8 : 1,
-                }}
+                bg={activeTab === 'classes' ? '#2563eb' : colors.surfaceBg}
+                opacity={pressed ? 0.85 : 1}
               >
                 <Text
                   textAlign="center"

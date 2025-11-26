@@ -63,7 +63,10 @@ export function SchoolCard({ school }: SchoolCardProps) {
                 {school.classCount} {school.classCount === 1 ? 'turma' : 'turmas'}
               </Text>
             </HStack>
-            {school.classCount > 0 && <StatusBadge label="Ativo" />}
+            <StatusBadge
+              label={school.status === 'active' ? 'Ativo' : 'Inativo'}
+              variant={school.status}
+            />
           </HStack>
         </Box>
       )}

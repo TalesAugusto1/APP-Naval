@@ -30,6 +30,7 @@ export const mockSchoolData = {
     name: 'Test School',
     address: '123 Test Street',
     classCount: 5,
+    status: 'active',
     createdAt: new Date(),
     updatedAt: new Date(),
     ...overrides,
@@ -42,6 +43,7 @@ export const mockSchoolData = {
         name: `Test School ${i + 1}`,
         address: `${100 + i} Test Street`,
         classCount: Math.floor(Math.random() * 10),
+        status: i % 3 === 0 ? 'inactive' : 'active',
       })
     );
   },

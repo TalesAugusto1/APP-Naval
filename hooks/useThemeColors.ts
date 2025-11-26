@@ -9,15 +9,20 @@ export interface ThemeColors {
   bgColor: string;
   bgColorHex: string;
   cardBg: string;
+  cardBgHex: string;
   surfaceBg: string;
+  surfaceBgHex: string;
 
   // Borders
   borderColor: string;
+  borderColorHex: string;
   dividerColor: string;
 
   // Text
   textColor: string;
+  textColorHex: string;
   textSecondary: string;
+  textSecondaryHex: string;
   textTertiary: string;
 
   // Icons (hex values for non-gluestack components)
@@ -56,15 +61,20 @@ export function useThemeColors(): ThemeColors {
     bgColor: isDark ? '$backgroundDark950' : '$backgroundLight50',
     bgColorHex: isDark ? '#0a0a0a' : '#fafafa',
     cardBg: isDark ? '$backgroundDark900' : '$white',
+    cardBgHex: isDark ? '#171717' : '#ffffff',
     surfaceBg: isDark ? '$backgroundDark800' : '$backgroundLight100',
+    surfaceBgHex: isDark ? '#262626' : '#f5f5f5',
 
     // Borders
     borderColor: isDark ? '$borderDark800' : '$borderLight100',
+    borderColorHex: isDark ? '#27272a' : '#e4e4e7',
     dividerColor: isDark ? '$borderDark800' : '$gray100',
 
     // Text
     textColor: isDark ? '$textDark50' : '$textLight900',
+    textColorHex: isDark ? '#fafafa' : '#18181b',
     textSecondary: isDark ? '$textDark400' : '$textLight500',
+    textSecondaryHex: isDark ? '#a1a1aa' : '#71717a',
     textTertiary: isDark ? '$textDark500' : '$textLight600',
 
     // Icons (hex values for lucide-react-native)

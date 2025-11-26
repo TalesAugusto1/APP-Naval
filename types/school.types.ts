@@ -3,6 +3,7 @@ export interface School {
   name: string;
   address: string;
   classCount: number;
+  status: 'active' | 'inactive';
   createdAt: Date;
   updatedAt: Date;
 }

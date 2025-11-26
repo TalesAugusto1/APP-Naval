@@ -11,12 +11,10 @@ import { SchoolCard } from './components/SchoolCard';
 import { SchoolListEmpty } from './components/SchoolListEmpty';
 import { SchoolSearchBar } from './components/SchoolSearchBar';
 import { SchoolSearchResults } from './components/SchoolSearchResults';
-import { SchoolFilters } from './components/SchoolFilters';
+import { SchoolFilters, SchoolFilterState } from './components/SchoolFilters';
 import { SchoolCardSkeleton } from '@/components/SkeletonCard';
 import { AnimatedFAB } from '@/components/AnimatedFAB';
 import { Plus } from 'lucide-react-native';
-
-type SortOption = 'name' | 'newest' | 'classes';
 
 export function SchoolListScreen() {
   const { schools, isLoading, error, fetchSchools, searchQuery, setSearchQuery } = useSchoolStore();
@@ -24,7 +22,12 @@ export function SchoolListScreen() {
   const { showToast } = useUIStore();
   const colors = useThemeColors();
   const [refreshing, setRefreshing] = useState(false);
-  const [sortBy, setSortBy] = useState<SortOption>('name');
+  const [filters, setFilters] = useState<SchoolFilterState>({
+    sortBy: 'name',
+    statuses: [],
+    dateRange: 'all',
+    classCountRange: { min: null, max: null },
+  });
   const insets = useSafeAreaInsets();
 
   const handleCreateSchool = () => {
@@ -36,22 +39,58 @@ export function SchoolListScreen() {
     navigateToCreateSchool();
   };
 
-  const sortedSchools = useMemo(() => {
-    const sorted = [...schools];
+  const filteredAndSortedSchools = useMemo(() => {
+    let filtered = [...schools];
 
-    switch (sortBy) {
+    // Apply status filter
+    if (filters.statuses.length > 0) {
+      filtered = filtered.filter((school) => filters.statuses.includes(school.status));
+    }
+
+    // Apply date range filter
+    if (filters.dateRange !== 'all') {
+      const now = new Date();
+      const cutoffDate = new Date();
+
+      switch (filters.dateRange) {
+        case 'last7days':
+          cutoffDate.setDate(now.getDate() - 7);
+          break;
+        case 'last30days':
+          cutoffDate.setDate(now.getDate() - 30);
+          break;
+        case 'last90days':
+          cutoffDate.setDate(now.getDate() - 90);
+          break;
+      }
+
+      filtered = filtered.filter(
+        (school) => new Date(school.createdAt).getTime() >= cutoffDate.getTime()
+      );
+    }
+
+    // Apply class count range filter
+    if (filters.classCountRange.min !== null) {
+      filtered = filtered.filter((school) => school.classCount >= filters.classCountRange.min!);
+    }
+    if (filters.classCountRange.max !== null) {
+      filtered = filtered.filter((school) => school.classCount <= filters.classCountRange.max!);
+    }
+
+    // Apply sorting
+    switch (filters.sortBy) {
       case 'name':
-        return sorted.sort((a, b) => a.name.localeCompare(b.name));
+        return filtered.sort((a, b) => a.name.localeCompare(b.name));
       case 'newest':
-        return sorted.sort(
+        return filtered.sort(
           (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
         );
       case 'classes':
-        return sorted.sort((a, b) => b.classCount - a.classCount);
+        return filtered.sort((a, b) => b.classCount - a.classCount);
       default:
-        return sorted;
+        return filtered;
     }
-  }, [schools, sortBy]);
+  }, [schools, filters]);
 
   useEffect(() => {
     fetchSchools();
@@ -86,7 +125,7 @@ export function SchoolListScreen() {
             <Box flex={1}>
               <SchoolSearchBar />
             </Box>
-            <SchoolFilters sortBy={sortBy} onSortChange={setSortBy} />
+            <SchoolFilters filters={filters} onFiltersChange={setFilters} />
           </HStack>
           {[...Array(5)].map((_, index) => (
             <SchoolCardSkeleton key={index} />
@@ -103,12 +142,12 @@ export function SchoolListScreen() {
           <Box flex={1}>
             <SchoolSearchBar />
           </Box>
-          <SchoolFilters sortBy={sortBy} onSortChange={setSortBy} />
+          <SchoolFilters filters={filters} onFiltersChange={setFilters} />
         </HStack>
 
         <SchoolSearchResults />
 
-        {sortedSchools.length === 0 && !isLoading ? (
+        {filteredAndSortedSchools.length === 0 && !isLoading ? (
           searchQuery ? (
             <VStack flex={1} justifyContent="center" alignItems="center" p="$8">
               <Text size="lg" color={colors.textColor} textAlign="center" mb="$4">
@@ -123,7 +162,7 @@ export function SchoolListScreen() {
           )
         ) : (
           <FlatList
-            data={sortedSchools}
+            data={filteredAndSortedSchools}
             renderItem={({ item }) => <SchoolCard school={item} />}
             keyExtractor={(item) => item.id}
             contentContainerStyle={{ paddingBottom: 120 + insets.bottom }}

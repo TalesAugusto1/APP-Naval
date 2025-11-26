@@ -92,6 +92,7 @@ export function makeServer({ environment = 'development' } = {}) {
         const newSchool = schema.create('school', {
           ...data,
           classCount: 0,
+          status: 'active',
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
         });

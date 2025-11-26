@@ -60,20 +60,20 @@ describe('SchoolCard', () => {
     expect(screen.getByText('0 turmas')).toBeTruthy();
   });
 
-  it('should show status badge when class count is greater than zero', () => {
-    const school = mockSchoolData.create({ classCount: 3 });
+  it('should show active status badge for active schools', () => {
+    const school = mockSchoolData.create({ status: 'active' });
 
     renderWithProviders(<SchoolCard school={school} />);
 
     expect(screen.getByText('Ativo')).toBeTruthy();
   });
 
-  it('should not show status badge when class count is zero', () => {
-    const school = mockSchoolData.create({ classCount: 0 });
+  it('should show inactive status badge for inactive schools', () => {
+    const school = mockSchoolData.create({ status: 'inactive' });
 
     renderWithProviders(<SchoolCard school={school} />);
 
-    expect(screen.queryByText('Ativo')).toBeNull();
+    expect(screen.getByText('Inativo')).toBeTruthy();
   });
 
   it('should navigate to school detail when pressed', () => {
