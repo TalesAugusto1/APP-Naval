@@ -64,3 +64,15 @@ export function dismissModal() {
     goBack();
   }
 }
+
+export function navigateToLogin() {
+  router.push('/auth/login' as any);
+}
+
+export function navigateToRegister() {
+  router.push('/auth/register' as any);
+}
+
+export function navigateToForgotPassword() {
+  router.push('/auth/forgot-password' as any);
+}

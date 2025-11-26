@@ -4,6 +4,7 @@ import { Class, Shift } from '@/types';
 import { navigateToEditClass } from '@/navigation';
 import { BookOpen, Clock, Calendar } from 'lucide-react-native';
 import { IconContainer } from '@/components/IconContainer';
+import { useProtectedAction } from '@/hooks/useProtectedAction';
 
 const SHIFT_CONFIG = {
   [Shift.MORNING]: {
@@ -33,9 +34,18 @@ interface ClassCardProps {
 
 export function ClassCard({ classItem, schoolName }: ClassCardProps) {
   const shiftInfo = SHIFT_CONFIG[classItem.shift];
+  const handlePress = useProtectedAction(async () => {
+    navigateToEditClass(classItem.id, classItem.schoolId);
+  });
 
   return (
-    <Pressable onPress={() => navigateToEditClass(classItem.id, classItem.schoolId)}>
+    <Pressable
+      onPress={handlePress}
+      accessible={true}
+      accessibilityRole="button"
+      accessibilityLabel={`Turma ${classItem.name}${schoolName ? ` da ${schoolName}` : ''}`}
+      accessibilityHint={`Toque para editar a turma ${classItem.name} do turno ${shiftInfo.label}, ano letivo ${classItem.schoolYear}`}
+    >
       {({ pressed }) => (
         <Box
           bg="$white"

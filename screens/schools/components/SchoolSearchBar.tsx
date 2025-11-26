@@ -49,6 +49,9 @@ export function SchoolSearchBar() {
         value={localValue}
         onChangeText={setLocalValue}
         returnKeyType="search"
+        accessible={true}
+        accessibilityLabel="Buscar escolas"
+        accessibilityHint="Digite o nome da escola para buscar"
       />
       {isSearching && (
         <InputSlot pr="$4">
@@ -56,7 +59,13 @@ export function SchoolSearchBar() {
         </InputSlot>
       )}
       {localValue.length > 0 && !isSearching && (
-        <Pressable onPress={handleClear}>
+        <Pressable
+          onPress={handleClear}
+          accessible={true}
+          accessibilityRole="button"
+          accessibilityLabel="Limpar busca"
+          accessibilityHint="Toque para limpar o campo de busca"
+        >
           <InputSlot pr="$4">
             <X size={20} color="#6b7280" />
           </InputSlot>

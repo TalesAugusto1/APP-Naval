@@ -2,7 +2,9 @@ import { useEffect, useState, useMemo } from 'react';
 import { FlatList, RefreshControl } from 'react-native';
 import { Box, VStack, HStack, Fab, FabIcon, Text, Button, ButtonText } from '@gluestack-ui/themed';
 import { useSchoolStore } from '@/store';
-import { navigateToCreateSchool } from '@/navigation';
+import { useAuthStore } from '@/store/useAuthStore';
+import { useUIStore } from '@/store/useUIStore';
+import { navigateToCreateSchool, navigateToLogin } from '@/navigation';
 import { SchoolCard } from './components/SchoolCard';
 import { SchoolListEmpty } from './components/SchoolListEmpty';
 import { SchoolSearchBar } from './components/SchoolSearchBar';
@@ -15,8 +17,19 @@ type SortOption = 'name' | 'newest' | 'classes';
 
 export function SchoolListScreen() {
   const { schools, isLoading, error, fetchSchools, searchQuery, setSearchQuery } = useSchoolStore();
+  const { isAuthenticated } = useAuthStore();
+  const { showToast } = useUIStore();
   const [refreshing, setRefreshing] = useState(false);
   const [sortBy, setSortBy] = useState<SortOption>('name');
+
+  const handleCreateSchool = () => {
+    if (!isAuthenticated) {
+      showToast('Você precisa fazer login para criar uma escola', 'warning');
+      navigateToLogin();
+      return;
+    }
+    navigateToCreateSchool();
+  };
 
   const sortedSchools = useMemo(() => {
     const sorted = [...schools];
@@ -117,9 +130,13 @@ export function SchoolListScreen() {
       <Fab
         size="lg"
         placement="bottom right"
-        onPress={navigateToCreateSchool}
+        onPress={handleCreateSchool}
         bg="$primary500"
         $hover-bg="$primary600"
+        accessible={true}
+        accessibilityRole="button"
+        accessibilityLabel="Adicionar nova escola"
+        accessibilityHint="Toque para abrir o formulário de cadastro de escola"
         style={{
           shadowColor: '#000',
           shadowOffset: { width: 0, height: 4 },

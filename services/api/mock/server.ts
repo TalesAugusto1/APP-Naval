@@ -2,6 +2,25 @@ import { createServer, Model, Response } from 'miragejs';
 import { schoolsData } from './data/schools';
 import { classesData } from './data/classes';
 
+const mockUsers = [
+  {
+    id: '1',
+    name: 'Administrador',
+    email: 'admin@escola.com',
+    password: 'Admin123!',
+    createdAt: new Date('2024-01-01').toISOString(),
+  },
+  {
+    id: '2',
+    name: 'Gestor Escolar',
+    email: 'gestor@escola.com',
+    password: 'Gestor123!',
+    createdAt: new Date('2024-01-01').toISOString(),
+  },
+];
+
+const sessions = new Map<string, string>();
+
 export function makeServer({ environment = 'development' } = {}) {
   return createServer({
     environment,
@@ -9,6 +28,7 @@ export function makeServer({ environment = 'development' } = {}) {
     models: {
       school: Model,
       class: Model,
+      user: Model,
     },
 
     seeds(server) {
@@ -18,6 +38,10 @@ export function makeServer({ environment = 'development' } = {}) {
 
       classesData.forEach((classItem) => {
         server.create('class', classItem);
+      });
+
+      mockUsers.forEach((user) => {
+        server.create('user', user);
       });
 
       console.log('🌱 Mock database seeded with sample data');
@@ -182,6 +206,90 @@ export function makeServer({ environment = 'development' } = {}) {
         }
 
         return new Response(204);
+      });
+
+      this.post('/auth/login', (schema, request) => {
+        const { email, password } = JSON.parse(request.requestBody);
+
+        const users = schema.all('user').models;
+        const user: any = users.find((u: any) => u.email === email);
+
+        if (!user || user.password !== password) {
+          return new Response(401, {}, { error: 'Email ou senha inválidos' });
+        }
+
+        const token = `token_${user.id}_${Date.now()}`;
+        sessions.set(token, user.id);
+
+        const { password: _, ...userData } = user.attrs;
+        return { user: userData, token };
+      });
+
+      this.post('/auth/register', (schema, request) => {
+        const { name, email, password } = JSON.parse(request.requestBody);
+
+        const users = schema.all('user').models;
+        const existingUser = users.find((u: any) => u.email === email);
+
+        if (existingUser) {
+          return new Response(409, {}, { error: 'Este email já está cadastrado' });
+        }
+
+        const newUser: any = schema.create('user', {
+          name,
+          email,
+          password,
+          createdAt: new Date().toISOString(),
+        });
+
+        const token = `token_${newUser.id}_${Date.now()}`;
+        sessions.set(token, newUser.id);
+
+        const { password: _, ...userData } = newUser.attrs;
+        return new Response(201, {}, { user: userData, token });
+      });
+
+      this.post('/auth/forgot-password', (schema, request) => {
+        const { email } = JSON.parse(request.requestBody);
+
+        const users = schema.all('user').models;
+        const user = users.find((u: any) => u.email === email);
+
+        if (!user) {
+          return new Response(404, {}, { error: 'Email não encontrado' });
+        }
+
+        return { message: 'Email de recuperação enviado com sucesso' };
+      });
+
+      this.get('/auth/me', (schema, request) => {
+        const authHeader = request.requestHeaders.Authorization;
+        const token = authHeader?.replace('Bearer ', '');
+
+        if (!token || !sessions.has(token)) {
+          return new Response(401, {}, { error: 'Token inválido ou expirado' });
+        }
+
+        const userId = sessions.get(token);
+        const user: any = schema.find('user', userId!);
+
+        if (!user) {
+          return new Response(404, {}, { error: 'Usuário não encontrado' });
+        }
+
+        const { password: _, ...userData } = user.attrs;
+        return { data: userData };
+      });
+
+      this.post('/auth/logout', (schema, request) => {
+        const authHeader = request.requestHeaders.Authorization;
+        const token = authHeader?.replace('Bearer ', '');
+
+        if (token) {
+          sessions.delete(token);
+        }
+
+        return { message: 'Logout realizado com sucesso' };
       });
 
       this.passthrough((request) => {

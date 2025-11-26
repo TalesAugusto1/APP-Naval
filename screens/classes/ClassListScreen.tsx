@@ -14,7 +14,9 @@ import {
 import { Plus } from 'lucide-react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { useClassStore, useSchoolStore } from '@/store';
-import { navigateToCreateClass } from '@/navigation';
+import { useAuthStore } from '@/store/useAuthStore';
+import { useUIStore } from '@/store/useUIStore';
+import { navigateToCreateClass, navigateToLogin } from '@/navigation';
 import { ClassCard } from './components/ClassCard';
 import { ClassListEmpty } from './components/ClassListEmpty';
 import { ClassSearchBar } from './components/ClassSearchBar';
@@ -26,10 +28,21 @@ export function ClassListScreen() {
   const { schoolId } = useLocalSearchParams<{ schoolId?: string }>();
   const { classes, isLoading, error, fetchClasses } = useClassStore();
   const { schools } = useSchoolStore();
+  const { isAuthenticated } = useAuthStore();
+  const { showToast } = useUIStore();
   const [refreshing, setRefreshing] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedShifts, setSelectedShifts] = useState<Shift[]>([]);
   const [selectedYears, setSelectedYears] = useState<number[]>([]);
+
+  const handleCreateClass = () => {
+    if (!isAuthenticated) {
+      showToast('Você precisa fazer login para criar uma turma', 'warning');
+      navigateToLogin();
+      return;
+    }
+    navigateToCreateClass(schoolId || '');
+  };
 
   useEffect(() => {
     fetchClasses(schoolId);
@@ -190,9 +203,13 @@ export function ClassListScreen() {
       <Fab
         size="lg"
         placement="bottom right"
-        onPress={() => navigateToCreateClass(schoolId || '')}
+        onPress={handleCreateClass}
         bg="$primary500"
         $hover-bg="$primary600"
+        accessible={true}
+        accessibilityRole="button"
+        accessibilityLabel="Adicionar nova turma"
+        accessibilityHint="Toque para abrir o formulário de cadastro de turma"
         style={{
           shadowColor: '#000',
           shadowOffset: { width: 0, height: 4 },

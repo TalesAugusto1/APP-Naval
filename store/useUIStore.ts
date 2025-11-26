@@ -17,6 +17,7 @@ interface UIState {
   toasts: ToastMessage[];
   modal: Modal;
   isGlobalLoading: boolean;
+  loginRequiredModalOpen: boolean;
 
   showToast: (message: string, type: ToastMessage['type']) => void;
   hideToast: (id: string) => void;
@@ -26,12 +27,16 @@ interface UIState {
   closeModal: () => void;
 
   setGlobalLoading: (isLoading: boolean) => void;
+
+  showLoginRequired: () => void;
+  hideLoginRequired: () => void;
 }
 
 export const useUIStore = create<UIState>((set) => ({
   toasts: [],
   modal: { isOpen: false, type: null },
   isGlobalLoading: false,
+  loginRequiredModalOpen: false,
 
   showToast: (message, type) => {
     const id = Math.random().toString(36).substring(7);
@@ -66,5 +71,13 @@ export const useUIStore = create<UIState>((set) => ({
 
   setGlobalLoading: (isLoading) => {
     set({ isGlobalLoading: isLoading });
+  },
+
+  showLoginRequired: () => {
+    set({ loginRequiredModalOpen: true });
+  },
+
+  hideLoginRequired: () => {
+    set({ loginRequiredModalOpen: false });
   },
 }));
