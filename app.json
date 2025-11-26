@@ -12,11 +12,12 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.schoolmanager.app",
-      "associatedDomains": ["applinks:school-manager.app"],
+      "associatedDomains": ["applinks:school-manager.app", "applinks:school-manager.app"],
       "buildNumber": "1",
       "infoPlist": {
         "NSCameraUsageDescription": "This app does not use the camera.",
-        "NSMicrophoneUsageDescription": "This app does not use the microphone."
+        "NSMicrophoneUsageDescription": "This app does not use the microphone.",
+        "ITSAppUsesNonExemptEncryption": false
       }
     },
     "android": {
@@ -78,6 +79,7 @@
     },
     "updates": {
       "url": "https://u.expo.dev/23aafe39-a383-4bd4-b3a2-62a053fd0bca"
-    }
+    },
+    "entryPoint": "./storybook.tsx"
   }
 }

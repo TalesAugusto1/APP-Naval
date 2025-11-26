@@ -15,10 +15,8 @@ import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { OfflineIndicator } from '@/components/OfflineIndicator';
 import { useAuthStore } from '@/store/useAuthStore';
 
-if (__DEV__) {
-  makeServer({ environment: 'development' });
-  console.log('🚀 Mock API server started at /api/*');
-}
+makeServer({ environment: __DEV__ ? 'development' : 'production' });
+console.log('🚀 Mock API server started at /api/*');
 
 export const unstable_settings = {
   anchor: '(tabs)',
