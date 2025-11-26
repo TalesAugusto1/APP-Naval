@@ -36,4 +36,3 @@ export const Pressable = ({ children, onPress, ...props }) =>
     { onPress, ...props },
     typeof children === 'function' ? children({ pressed: false }) : children
   );
-
