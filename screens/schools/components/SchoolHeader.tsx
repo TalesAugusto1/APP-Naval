@@ -2,12 +2,17 @@ import { VStack, Heading, Text, HStack, Button, ButtonIcon } from '@gluestack-ui
 import { School } from '@/types';
 import { navigateToEditSchool } from '@/navigation';
 import { MapPin, Pencil } from 'lucide-react-native';
+import { useProtectedAction } from '@/hooks/useProtectedAction';
 
 interface SchoolHeaderProps {
   school: School;
 }
 
 export function SchoolHeader({ school }: SchoolHeaderProps) {
+  const handleEdit = useProtectedAction(async () => {
+    navigateToEditSchool(school.id);
+  });
+
   return (
     <VStack
       space="sm"
@@ -36,7 +41,7 @@ export function SchoolHeader({ school }: SchoolHeaderProps) {
             </Text>
           </HStack>
         </VStack>
-        <Button variant="outline" size="sm" onPress={() => navigateToEditSchool(school.id)} ml="$3">
+        <Button variant="outline" size="sm" onPress={handleEdit} ml="$3">
           <ButtonIcon>
             <Pencil size={16} color="#2196F3" />
           </ButtonIcon>
