@@ -12,7 +12,13 @@ interface SchoolCardProps {
 
 export function SchoolCard({ school }: SchoolCardProps) {
   return (
-    <Pressable onPress={() => navigateToSchoolDetail(school.id)}>
+    <Pressable
+      onPress={() => navigateToSchoolDetail(school.id)}
+      accessible={true}
+      accessibilityRole="button"
+      accessibilityLabel={`Escola ${school.name}`}
+      accessibilityHint={`Toque para ver detalhes da escola ${school.name} com ${school.classCount} ${school.classCount === 1 ? 'turma' : 'turmas'}`}
+    >
       {({ pressed }) => (
         <Box
           bg="$white"

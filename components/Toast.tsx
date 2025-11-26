@@ -27,7 +27,13 @@ export function Toast({ id, type, message, duration = 3000, onDismiss }: ToastPr
       exiting={FadeOutUp.duration(200)}
       layout={Layout}
     >
-      <Pressable onPress={() => onDismiss(id)}>
+      <Pressable
+        onPress={() => onDismiss(id)}
+        accessible={true}
+        accessibilityRole="alert"
+        accessibilityLabel={`${type === 'success' ? 'Sucesso' : type === 'error' ? 'Erro' : type === 'warning' ? 'Aviso' : 'Informação'}: ${message}`}
+        accessibilityLiveRegion="polite"
+      >
         <Alert
           action={type}
           variant="solid"

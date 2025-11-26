@@ -83,6 +83,9 @@ export function ClassFormFields({
             value={name}
             onChangeText={onChangeName}
             onBlur={onBlurName}
+            accessible={true}
+            accessibilityLabel="Nome da turma"
+            accessibilityHint="Digite o nome da turma"
           />
         </Input>
         {errors.name && (
@@ -101,7 +104,13 @@ export function ClassFormFields({
             </FormControlLabelText>
           </HStack>
         </FormControlLabel>
-        <Select selectedValue={shift} onValueChange={(value) => onChangeShift(value as Shift)}>
+        <Select
+          selectedValue={shift}
+          onValueChange={(value) => onChangeShift(value as Shift)}
+          accessible={true}
+          accessibilityLabel="Turno da turma"
+          accessibilityHint="Selecione o turno: manhã, tarde ou noite"
+        >
           <SelectTrigger
             variant="outline"
             size="lg"
@@ -152,6 +161,9 @@ export function ClassFormFields({
             onChangeText={onChangeSchoolYear}
             onBlur={onBlurSchoolYear}
             keyboardType="number-pad"
+            accessible={true}
+            accessibilityLabel="Ano letivo"
+            accessibilityHint="Digite o ano letivo da turma"
           />
         </Input>
         {errors.schoolYear && (
@@ -171,7 +183,13 @@ export function ClassFormFields({
               </FormControlLabelText>
             </HStack>
           </FormControlLabel>
-          <Select selectedValue={schoolId} onValueChange={onChangeSchoolId}>
+          <Select
+            selectedValue={schoolId}
+            onValueChange={onChangeSchoolId}
+            accessible={true}
+            accessibilityLabel="Escola da turma"
+            accessibilityHint="Selecione a escola para vincular esta turma"
+          >
             <SelectTrigger
               variant="outline"
               size="lg"

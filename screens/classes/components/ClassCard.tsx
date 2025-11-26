@@ -35,7 +35,13 @@ export function ClassCard({ classItem, schoolName }: ClassCardProps) {
   const shiftInfo = SHIFT_CONFIG[classItem.shift];
 
   return (
-    <Pressable onPress={() => navigateToEditClass(classItem.id, classItem.schoolId)}>
+    <Pressable
+      onPress={() => navigateToEditClass(classItem.id, classItem.schoolId)}
+      accessible={true}
+      accessibilityRole="button"
+      accessibilityLabel={`Turma ${classItem.name}${schoolName ? ` da ${schoolName}` : ''}`}
+      accessibilityHint={`Toque para editar a turma ${classItem.name} do turno ${shiftInfo.label}, ano letivo ${classItem.schoolYear}`}
+    >
       {({ pressed }) => (
         <Box
           bg="$white"

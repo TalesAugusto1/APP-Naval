@@ -9,6 +9,7 @@ import { config } from '../gluestack.config';
 import { makeServer } from '../services/api/mock/server';
 import { ToastContainer } from '@/components/ToastContainer';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
+import { OfflineIndicator } from '@/components/OfflineIndicator';
 
 if (__DEV__) {
   makeServer({ environment: 'development' });
@@ -26,6 +27,7 @@ export default function RootLayout() {
     <GluestackUIProvider config={config}>
       <ErrorBoundary>
         <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+          <OfflineIndicator />
           <Stack>
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
             <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />

@@ -193,6 +193,10 @@ export function ClassListScreen() {
         onPress={() => navigateToCreateClass(schoolId || '')}
         bg="$primary500"
         $hover-bg="$primary600"
+        accessible={true}
+        accessibilityRole="button"
+        accessibilityLabel="Adicionar nova turma"
+        accessibilityHint="Toque para abrir o formulário de cadastro de turma"
         style={{
           shadowColor: '#000',
           shadowOffset: { width: 0, height: 4 },

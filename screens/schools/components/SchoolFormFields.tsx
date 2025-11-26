@@ -52,6 +52,9 @@ export function SchoolFormFields({
             value={name}
             onChangeText={onChangeName}
             onBlur={onBlurName}
+            accessible={true}
+            accessibilityLabel="Nome da escola"
+            accessibilityHint="Digite o nome da escola"
           />
         </Input>
         {errors.name && (
@@ -83,6 +86,9 @@ export function SchoolFormFields({
             onBlur={onBlurAddress}
             multiline
             numberOfLines={2}
+            accessible={true}
+            accessibilityLabel="Endereço da escola"
+            accessibilityHint="Digite o endereço completo da escola"
           />
         </Input>
         {errors.address && (

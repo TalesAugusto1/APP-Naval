@@ -1,12 +1,22 @@
 import { useEffect } from 'react';
 import { ScrollView } from 'react-native';
-import { Box, VStack, Spinner, Text, Button, ButtonText } from '@gluestack-ui/themed';
+import {
+  Box,
+  VStack,
+  Spinner,
+  Text,
+  Button,
+  ButtonText,
+  Heading,
+  Divider,
+} from '@gluestack-ui/themed';
 import { useLocalSearchParams } from 'expo-router';
 import { useSchoolStore } from '@/store';
 import { goBack } from '@/navigation';
 import { SchoolHeader } from './components/SchoolHeader';
 import { SchoolStats } from './components/SchoolStats';
 import { SchoolClassesList } from './components/SchoolClassesList';
+import { SchoolDashboard } from './components/SchoolDashboard';
 
 export function SchoolDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -46,6 +56,22 @@ export function SchoolDetailScreen() {
           <SchoolHeader school={selectedSchool} />
           <SchoolStats classCount={selectedSchool.classCount} />
           <SchoolClassesList schoolId={selectedSchool.id} />
+          {selectedSchool.classCount > 0 && (
+            <>
+              <Box px="$6" mt="$4">
+                <Divider bg="$gray200" />
+              </Box>
+              <Box px="$6" mt="$2">
+                <Heading size="xl" color="$gray900" mb="$2">
+                  Estatísticas
+                </Heading>
+                <Text color="$gray600" size="sm">
+                  Visualize as estatísticas das turmas desta escola
+                </Text>
+              </Box>
+              <SchoolDashboard schoolId={selectedSchool.id} />
+            </>
+          )}
         </VStack>
       </Box>
     </ScrollView>

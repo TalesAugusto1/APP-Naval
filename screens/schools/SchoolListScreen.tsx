@@ -120,6 +120,10 @@ export function SchoolListScreen() {
         onPress={navigateToCreateSchool}
         bg="$primary500"
         $hover-bg="$primary600"
+        accessible={true}
+        accessibilityRole="button"
+        accessibilityLabel="Adicionar nova escola"
+        accessibilityHint="Toque para abrir o formulário de cadastro de escola"
         style={{
           shadowColor: '#000',
           shadowOffset: { width: 0, height: 4 },
