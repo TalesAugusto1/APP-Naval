@@ -11,6 +11,7 @@ import {
   Pressable,
   Divider,
 } from '@gluestack-ui/themed';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useLocalSearchParams } from 'expo-router';
 import { useSchoolStore } from '@/store';
 import { goBack } from '@/navigation';
@@ -26,6 +27,7 @@ export function SchoolDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { selectedSchool, fetchSchoolById, isLoading, error } = useSchoolStore();
   const [activeTab, setActiveTab] = useState<TabType>('classes');
+  const insets = useSafeAreaInsets();
 
   useEffect(() => {
     if (id) {
@@ -35,7 +37,13 @@ export function SchoolDetailScreen() {
 
   if (isLoading) {
     return (
-      <Box flex={1} justifyContent="center" alignItems="center" bg="$backgroundLight50">
+      <Box
+        flex={1}
+        justifyContent="center"
+        alignItems="center"
+        bg="$backgroundLight50"
+        style={{ paddingTop: insets.top }}
+      >
         <Spinner size="large" />
       </Box>
     );
@@ -43,7 +51,14 @@ export function SchoolDetailScreen() {
 
   if (error || !selectedSchool) {
     return (
-      <Box flex={1} justifyContent="center" alignItems="center" p="$8" bg="$backgroundLight50">
+      <Box
+        flex={1}
+        justifyContent="center"
+        alignItems="center"
+        p="$8"
+        bg="$backgroundLight50"
+        style={{ paddingTop: insets.top }}
+      >
         <Text size="lg" color="$error500" textAlign="center" mb="$4">
           {error || 'Escola não encontrada'}
         </Text>
@@ -55,7 +70,7 @@ export function SchoolDetailScreen() {
   }
 
   return (
-    <Box flex={1} bg="#f9fafb">
+    <Box flex={1} bg="#f9fafb" style={{ paddingTop: insets.top }}>
       {/* Header Section */}
       <Box bg="$white" borderBottomWidth={1} borderBottomColor="$gray200" px="$6" pt="$6" pb="$4">
         <SchoolHeader school={selectedSchool} />

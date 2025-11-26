@@ -14,6 +14,7 @@ import {
   AlertDialogFooter,
   Text,
 } from '@gluestack-ui/themed';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useLocalSearchParams } from 'expo-router';
 import { useClassStore, useSchoolStore, useUIStore } from '@/store';
 import { validateCreateClass } from '@/services';
@@ -31,6 +32,7 @@ export function ClassFormScreen() {
     useClassStore();
   const { schools, fetchSchools } = useSchoolStore();
   const { showToast } = useUIStore();
+  const insets = useSafeAreaInsets();
 
   const currentYear = new Date().getFullYear();
   const [name, setName] = useState('');
@@ -133,7 +135,7 @@ export function ClassFormScreen() {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={{ flex: 1 }}
     >
-      <ScrollView>
+      <ScrollView contentContainerStyle={{ paddingTop: insets.top }}>
         <Box flex={1} p="$6" bg="$white">
           <VStack space="xl">
             <ClassFormFields

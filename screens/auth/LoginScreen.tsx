@@ -13,6 +13,7 @@ import {
   CheckboxLabel,
   CheckIcon,
 } from '@gluestack-ui/themed';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAuthStore } from '@/store/useAuthStore';
 import { useUIStore } from '@/store/useUIStore';
 import { goBack } from '@/navigation';
@@ -29,6 +30,7 @@ export function LoginScreen() {
 
   const { login, isLoading } = useAuthStore();
   const { showToast } = useUIStore();
+  const insets = useSafeAreaInsets();
 
   const validate = () => {
     const newErrors: { email?: string; password?: string } = {};
@@ -68,7 +70,7 @@ export function LoginScreen() {
     >
       <ScrollView
         style={{ flex: 1, backgroundColor: '#fafafa' }}
-        contentContainerStyle={{ flexGrow: 1 }}
+        contentContainerStyle={{ flexGrow: 1, paddingTop: insets.top }}
         keyboardShouldPersistTaps="handled"
       >
         <Box flex={1} p="$6" justifyContent="center">

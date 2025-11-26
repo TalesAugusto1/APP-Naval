@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import { Box, VStack, Heading, Text, Pressable, HStack } from '@gluestack-ui/themed';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAuthStore } from '@/store/useAuthStore';
 import { useUIStore } from '@/store/useUIStore';
 import { AuthInput } from './components/AuthInput';
@@ -15,6 +16,7 @@ export function ForgotPasswordScreen() {
 
   const { forgotPassword, isLoading } = useAuthStore();
   const { showToast } = useUIStore();
+  const insets = useSafeAreaInsets();
 
   const validate = () => {
     if (!email.trim()) {
@@ -43,7 +45,13 @@ export function ForgotPasswordScreen() {
 
   if (emailSent) {
     return (
-      <Box flex={1} p="$6" justifyContent="center" bg="$backgroundLight50">
+      <Box
+        flex={1}
+        p="$6"
+        justifyContent="center"
+        bg="$backgroundLight50"
+        style={{ paddingTop: insets.top }}
+      >
         <VStack space="2xl" maxWidth={400} width="$full" alignSelf="center">
           <VStack space="md" alignItems="center">
             <Box
@@ -98,7 +106,7 @@ export function ForgotPasswordScreen() {
     >
       <ScrollView
         style={{ flex: 1, backgroundColor: '#fafafa' }}
-        contentContainerStyle={{ flexGrow: 1 }}
+        contentContainerStyle={{ flexGrow: 1, paddingTop: insets.top }}
         keyboardShouldPersistTaps="handled"
       >
         <Box flex={1} p="$6" justifyContent="center">

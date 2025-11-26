@@ -1,6 +1,7 @@
 import { useEffect, useState, useMemo } from 'react';
 import { FlatList, RefreshControl } from 'react-native';
 import { Box, VStack, HStack, Fab, FabIcon, Text, Button, ButtonText } from '@gluestack-ui/themed';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useSchoolStore } from '@/store';
 import { useAuthStore } from '@/store/useAuthStore';
 import { useUIStore } from '@/store/useUIStore';
@@ -21,6 +22,7 @@ export function SchoolListScreen() {
   const { showToast } = useUIStore();
   const [refreshing, setRefreshing] = useState(false);
   const [sortBy, setSortBy] = useState<SortOption>('name');
+  const insets = useSafeAreaInsets();
 
   const handleCreateSchool = () => {
     if (!isAuthenticated) {
@@ -75,8 +77,8 @@ export function SchoolListScreen() {
 
   if (isLoading && schools.length === 0) {
     return (
-      <Box flex={1} bg="$backgroundLight50">
-        <VStack flex={1} p="$4" space="md">
+      <Box flex={1} bg="$backgroundLight50" style={{ paddingTop: insets.top }}>
+        <VStack flex={1} px="$4" pt="$4" space="md">
           <HStack space="sm">
             <Box flex={1}>
               <SchoolSearchBar />
@@ -92,8 +94,8 @@ export function SchoolListScreen() {
   }
 
   return (
-    <Box flex={1} bg="$backgroundLight50" position="relative">
-      <VStack flex={1} p="$4" space="md">
+    <Box flex={1} bg="$backgroundLight50" position="relative" style={{ paddingTop: insets.top }}>
+      <VStack flex={1} px="$4" pt="$4" space="md">
         <HStack space="sm">
           <Box flex={1}>
             <SchoolSearchBar />

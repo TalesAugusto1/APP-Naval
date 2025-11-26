@@ -11,6 +11,7 @@ import {
   ButtonText,
 } from '@gluestack-ui/themed';
 import { Sun, Moon, Monitor, Check, User, LogOut, LogIn } from 'lucide-react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useSettingsStore } from '@/store';
 import { useAuthStore } from '@/store/useAuthStore';
 import { useUIStore } from '@/store/useUIStore';
@@ -39,6 +40,7 @@ export function SettingsScreen() {
   const { user, isAuthenticated, logout, isLoading } = useAuthStore();
   const { showToast } = useUIStore();
   const systemTheme = useColorScheme();
+  const insets = useSafeAreaInsets();
 
   const handleLogout = async () => {
     try {
@@ -51,7 +53,7 @@ export function SettingsScreen() {
 
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#fafafa' }}>
-      <VStack flex={1} p="$6" space="xl">
+      <VStack flex={1} px="$6" pt="$6" pb="$6" space="xl" style={{ paddingTop: insets.top + 24 }}>
         <Heading size="2xl">Configurações</Heading>
 
         <VStack space="md">

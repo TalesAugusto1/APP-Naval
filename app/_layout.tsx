@@ -4,6 +4,7 @@ import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
 import { GluestackUIProvider } from '@gluestack-ui/themed';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { config } from '../gluestack.config';
@@ -31,21 +32,23 @@ export default function RootLayout() {
   }, [loadSession]);
 
   return (
-    <GluestackUIProvider config={config}>
-      <ErrorBoundary>
-        <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-          <OfflineIndicator />
-          <Stack>
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            <Stack.Screen name="auth/login" options={{ headerShown: false }} />
-            <Stack.Screen name="auth/register" options={{ headerShown: false }} />
-            <Stack.Screen name="auth/forgot-password" options={{ headerShown: false }} />
-            <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
-          </Stack>
-          <ToastContainer />
-          <StatusBar style="auto" />
-        </ThemeProvider>
-      </ErrorBoundary>
-    </GluestackUIProvider>
+    <SafeAreaProvider>
+      <GluestackUIProvider config={config}>
+        <ErrorBoundary>
+          <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+            <OfflineIndicator />
+            <Stack>
+              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+              <Stack.Screen name="auth/login" options={{ headerShown: false }} />
+              <Stack.Screen name="auth/register" options={{ headerShown: false }} />
+              <Stack.Screen name="auth/forgot-password" options={{ headerShown: false }} />
+              <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
+            </Stack>
+            <ToastContainer />
+            <StatusBar style="auto" />
+          </ThemeProvider>
+        </ErrorBoundary>
+      </GluestackUIProvider>
+    </SafeAreaProvider>
   );
 }

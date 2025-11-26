@@ -14,6 +14,7 @@ import {
   AlertDialogFooter,
   Text,
 } from '@gluestack-ui/themed';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useLocalSearchParams } from 'expo-router';
 import { useSchoolStore, useUIStore } from '@/store';
 import { validateCreateSchool } from '@/services';
@@ -29,6 +30,7 @@ export function SchoolFormScreen() {
   const { selectedSchool, fetchSchoolById, createSchool, updateSchool, deleteSchool, isLoading } =
     useSchoolStore();
   const { showToast } = useUIStore();
+  const insets = useSafeAreaInsets();
 
   const [name, setName] = useState('');
   const [address, setAddress] = useState('');
@@ -102,7 +104,7 @@ export function SchoolFormScreen() {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={{ flex: 1 }}
     >
-      <ScrollView>
+      <ScrollView contentContainerStyle={{ paddingTop: insets.top }}>
         <Box flex={1} p="$6" bg="$backgroundLight50">
           <VStack space="xl">
             <Heading size="xl">{mode === 'create' ? 'Nova Escola' : 'Editar Escola'}</Heading>
