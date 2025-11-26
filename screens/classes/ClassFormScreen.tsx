@@ -134,10 +134,8 @@ export function ClassFormScreen() {
       style={{ flex: 1 }}
     >
       <ScrollView>
-        <Box flex={1} p="$6" bg="$backgroundLight50">
+        <Box flex={1} p="$6" bg="$white">
           <VStack space="xl">
-            <Heading size="xl">{mode === 'create' ? 'Nova Turma' : 'Editar Turma'}</Heading>
-
             <ClassFormFields
               name={name}
               shift={shift}
@@ -151,7 +149,7 @@ export function ClassFormScreen() {
               onChangeSchoolId={setSchoolId}
               onBlurName={() => validateField('name')}
               onBlurSchoolYear={() => validateField('schoolYear')}
-              showSchoolSelector={!params.schoolId}
+              showSchoolSelector={true}
             />
 
             <Button
@@ -159,8 +157,11 @@ export function ClassFormScreen() {
               size="lg"
               onPress={handleSubmit}
               isDisabled={!isValid || isLoading}
+              bg="#2563eb"
+              borderRadius="$xl"
+              h={48}
             >
-              <ButtonText>{isLoading ? 'Salvando...' : 'Salvar'}</ButtonText>
+              <ButtonText>{isLoading ? 'Salvando...' : 'Salvar Turma'}</ButtonText>
             </Button>
 
             {mode === 'edit' && (

@@ -19,10 +19,8 @@ import {
   SelectDragIndicatorWrapper,
   Icon,
   ChevronDownIcon,
-  HStack,
 } from '@gluestack-ui/themed';
 import { Shift, School } from '@/types';
-import { BookOpen, Clock, Calendar, Building } from 'lucide-react-native';
 
 const SHIFT_LABELS = {
   [Shift.MORNING]: 'Manhã',
@@ -62,24 +60,65 @@ export function ClassFormFields({
   showSchoolSelector = false,
 }: ClassFormFieldsProps) {
   return (
-    <VStack space="xl">
+    <VStack space="lg">
+      {/* School Field - Always First */}
+      <FormControl isRequired isInvalid={!!errors.schoolId}>
+        <FormControlLabel>
+          <FormControlLabelText fontWeight="$medium" color="$gray900">
+            Escola
+          </FormControlLabelText>
+        </FormControlLabel>
+        <Select
+          selectedValue={schoolId}
+          onValueChange={onChangeSchoolId}
+          accessible={true}
+          accessibilityLabel="Escola da turma"
+          accessibilityHint="Selecione a escola para vincular esta turma"
+        >
+          <SelectTrigger
+            variant="outline"
+            size="lg"
+            borderRadius="$xl"
+            borderColor={errors.schoolId ? '$error500' : '$gray200'}
+            bg="$backgroundLight50"
+          >
+            <SelectInput placeholder="Selecione uma escola" />
+            <SelectIcon mr="$3" as={ChevronDownIcon} />
+          </SelectTrigger>
+          <SelectPortal>
+            <SelectBackdrop />
+            <SelectContent>
+              <SelectDragIndicatorWrapper>
+                <SelectDragIndicator />
+              </SelectDragIndicatorWrapper>
+              {schools.map((school) => (
+                <SelectItem key={school.id} label={school.name} value={school.id} />
+              ))}
+            </SelectContent>
+          </SelectPortal>
+        </Select>
+        {errors.schoolId && (
+          <FormControlError>
+            <FormControlErrorText>{errors.schoolId}</FormControlErrorText>
+          </FormControlError>
+        )}
+      </FormControl>
+
+      {/* Class Name Field */}
       <FormControl isRequired isInvalid={!!errors.name}>
         <FormControlLabel>
-          <HStack space="xs" alignItems="center">
-            <BookOpen size={16} color="#4b5563" />
-            <FormControlLabelText fontWeight="$semibold" color="$gray900">
-              Nome da Turma
-            </FormControlLabelText>
-          </HStack>
+          <FormControlLabelText fontWeight="$medium" color="$gray900">
+            Nome da Turma
+          </FormControlLabelText>
         </FormControlLabel>
         <Input
-          borderRadius="$lg"
+          borderRadius="$xl"
           borderWidth={1}
-          borderColor={errors.name ? '$error500' : '$gray100'}
-          bg="$white"
+          borderColor={errors.name ? '$error500' : '$gray200'}
+          bg="$backgroundLight50"
         >
           <InputField
-            placeholder="Ex: 1º Ano A"
+            placeholder="Ex: 7º Ano C"
             value={name}
             onChangeText={onChangeName}
             onBlur={onBlurName}
@@ -95,14 +134,12 @@ export function ClassFormFields({
         )}
       </FormControl>
 
+      {/* Shift Field */}
       <FormControl isRequired isInvalid={!!errors.shift}>
         <FormControlLabel>
-          <HStack space="xs" alignItems="center">
-            <Clock size={16} color="#4b5563" />
-            <FormControlLabelText fontWeight="$semibold" color="$gray900">
-              Turno
-            </FormControlLabelText>
-          </HStack>
+          <FormControlLabelText fontWeight="$medium" color="$gray900">
+            Turno
+          </FormControlLabelText>
         </FormControlLabel>
         <Select
           selectedValue={shift}
@@ -114,9 +151,9 @@ export function ClassFormFields({
           <SelectTrigger
             variant="outline"
             size="lg"
-            borderRadius="$lg"
-            borderColor={errors.shift ? '$error500' : '$gray100'}
-            bg="$white"
+            borderRadius="$xl"
+            borderColor={errors.shift ? '$error500' : '$gray200'}
+            bg="$backgroundLight50"
           >
             <SelectInput placeholder="Selecione o turno" />
             <SelectIcon mr="$3" as={ChevronDownIcon} />
@@ -140,20 +177,18 @@ export function ClassFormFields({
         )}
       </FormControl>
 
+      {/* School Year Field */}
       <FormControl isRequired isInvalid={!!errors.schoolYear}>
         <FormControlLabel>
-          <HStack space="xs" alignItems="center">
-            <Calendar size={16} color="#4b5563" />
-            <FormControlLabelText fontWeight="$semibold" color="$gray900">
-              Ano Letivo
-            </FormControlLabelText>
-          </HStack>
+          <FormControlLabelText fontWeight="$medium" color="$gray900">
+            Ano Letivo
+          </FormControlLabelText>
         </FormControlLabel>
         <Input
-          borderRadius="$lg"
+          borderRadius="$xl"
           borderWidth={1}
-          borderColor={errors.schoolYear ? '$error500' : '$gray100'}
-          bg="$white"
+          borderColor={errors.schoolYear ? '$error500' : '$gray200'}
+          bg="$backgroundLight50"
         >
           <InputField
             placeholder="2025"
@@ -172,53 +207,6 @@ export function ClassFormFields({
           </FormControlError>
         )}
       </FormControl>
-
-      {showSchoolSelector && (
-        <FormControl isRequired isInvalid={!!errors.schoolId}>
-          <FormControlLabel>
-            <HStack space="xs" alignItems="center">
-              <Building size={16} color="#4b5563" />
-              <FormControlLabelText fontWeight="$semibold" color="$gray900">
-                Escola
-              </FormControlLabelText>
-            </HStack>
-          </FormControlLabel>
-          <Select
-            selectedValue={schoolId}
-            onValueChange={onChangeSchoolId}
-            accessible={true}
-            accessibilityLabel="Escola da turma"
-            accessibilityHint="Selecione a escola para vincular esta turma"
-          >
-            <SelectTrigger
-              variant="outline"
-              size="lg"
-              borderRadius="$lg"
-              borderColor={errors.schoolId ? '$error500' : '$gray100'}
-              bg="$white"
-            >
-              <SelectInput placeholder="Selecione a escola" />
-              <SelectIcon mr="$3" as={ChevronDownIcon} />
-            </SelectTrigger>
-            <SelectPortal>
-              <SelectBackdrop />
-              <SelectContent>
-                <SelectDragIndicatorWrapper>
-                  <SelectDragIndicator />
-                </SelectDragIndicatorWrapper>
-                {schools.map((school) => (
-                  <SelectItem key={school.id} label={school.name} value={school.id} />
-                ))}
-              </SelectContent>
-            </SelectPortal>
-          </Select>
-          {errors.schoolId && (
-            <FormControlError>
-              <FormControlErrorText>{errors.schoolId}</FormControlErrorText>
-            </FormControlError>
-          )}
-        </FormControl>
-      )}
     </VStack>
   );
 }
