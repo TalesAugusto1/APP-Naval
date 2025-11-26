@@ -87,9 +87,7 @@ export function ClassFormFields({
         <Select selectedValue={shift} onValueChange={(value) => onChangeShift(value as Shift)}>
           <SelectTrigger variant="outline" size="lg">
             <SelectInput placeholder="Selecione o turno" />
-            <SelectIcon mr="$3">
-              <Icon as={ChevronDownIcon} />
-            </SelectIcon>
+            <SelectIcon mr="$3" as={ChevronDownIcon} />
           </SelectTrigger>
           <SelectPortal>
             <SelectBackdrop />
@@ -138,9 +136,7 @@ export function ClassFormFields({
           <Select selectedValue={schoolId} onValueChange={onChangeSchoolId}>
             <SelectTrigger variant="outline" size="lg">
               <SelectInput placeholder="Selecione a escola" />
-              <SelectIcon mr="$3">
-                <Icon as={ChevronDownIcon} />
-              </SelectIcon>
+              <SelectIcon mr="$3" as={ChevronDownIcon} />
             </SelectTrigger>
             <SelectPortal>
               <SelectBackdrop />

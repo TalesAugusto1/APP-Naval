@@ -16,4 +16,5 @@ export interface UpdateSchoolDTO {
   id: string;
   name?: string;
   address?: string;
+  classCount?: number;
 }
