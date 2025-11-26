@@ -9,9 +9,9 @@ import {
   Text,
   Button,
   ButtonText,
-  Spinner,
   Heading,
 } from '@gluestack-ui/themed';
+import { Plus } from 'lucide-react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { useClassStore, useSchoolStore } from '@/store';
 import { navigateToCreateClass } from '@/navigation';
@@ -20,6 +20,7 @@ import { ClassListEmpty } from './components/ClassListEmpty';
 import { ClassSearchBar } from './components/ClassSearchBar';
 import { ClassFilters } from './components/ClassFilters';
 import { Shift } from '@/types';
+import { ClassCardSkeleton } from '@/components/SkeletonCard';
 
 export function ClassListScreen() {
   const { schoolId } = useLocalSearchParams<{ schoolId?: string }>();
@@ -92,8 +93,30 @@ export function ClassListScreen() {
 
   if (isLoading && classes.length === 0) {
     return (
-      <Box flex={1} bg="$backgroundLight50" justifyContent="center" alignItems="center">
-        <Spinner size="large" />
+      <Box flex={1} bg="$backgroundLight50">
+        <VStack flex={1} p="$4" space="md">
+          {schoolName && (
+            <Heading size="lg" mb="$2">
+              Turmas - {schoolName}
+            </Heading>
+          )}
+          <HStack space="sm">
+            <Box flex={1}>
+              <ClassSearchBar value={searchQuery} onChangeText={setSearchQuery} />
+            </Box>
+            <ClassFilters
+              selectedShifts={selectedShifts}
+              selectedYears={selectedYears}
+              availableYears={availableYears}
+              onShiftsChange={setSelectedShifts}
+              onYearsChange={setSelectedYears}
+              onClearFilters={handleClearFilters}
+            />
+          </HStack>
+          {[...Array(5)].map((_, index) => (
+            <ClassCardSkeleton key={index} />
+          ))}
+        </VStack>
       </Box>
     );
   }
@@ -170,11 +193,16 @@ export function ClassListScreen() {
         onPress={() => navigateToCreateClass(schoolId || '')}
         bg="$primary500"
         $hover-bg="$primary600"
+        style={{
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 4 },
+          shadowOpacity: 0.15,
+          shadowRadius: 12,
+          elevation: 5,
+        }}
       >
         <FabIcon>
-          <Text color="$white" fontSize={24}>
-            +
-          </Text>
+          <Plus size={24} color="white" />
         </FabIcon>
       </Fab>
     </Box>

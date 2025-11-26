@@ -7,6 +7,8 @@ import { GluestackUIProvider } from '@gluestack-ui/themed';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { config } from '../gluestack.config';
 import { makeServer } from '../services/api/mock/server';
+import { ToastContainer } from '@/components/ToastContainer';
+import { ErrorBoundary } from '@/components/ErrorBoundary';
 
 if (__DEV__) {
   makeServer({ environment: 'development' });
@@ -22,13 +24,16 @@ export default function RootLayout() {
 
   return (
     <GluestackUIProvider config={config}>
-      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
-        </Stack>
-        <StatusBar style="auto" />
-      </ThemeProvider>
+      <ErrorBoundary>
+        <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+          <Stack>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
+          </Stack>
+          <ToastContainer />
+          <StatusBar style="auto" />
+        </ThemeProvider>
+      </ErrorBoundary>
     </GluestackUIProvider>
   );
 }

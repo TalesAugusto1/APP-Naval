@@ -34,27 +34,27 @@ export function replace<T extends RouteName>(route: T, params?: RouteParams[T]) 
 }
 
 export function navigateToSchoolDetail(schoolId: string) {
-  router.push(`/(tabs)/schools/${schoolId}` as any);
+  router.push(`/schools/${schoolId}` as any);
 }
 
 export function navigateToCreateSchool() {
-  router.push('/(tabs)/schools/create' as any);
+  router.push('/schools/create' as any);
 }
 
 export function navigateToEditSchool(schoolId: string) {
-  router.push(`/(tabs)/schools/edit/${schoolId}` as any);
+  router.push(`/schools/edit/${schoolId}` as any);
 }
 
 export function navigateToSchoolClasses(schoolId: string) {
-  router.push(`/(tabs)/classes?schoolId=${schoolId}` as any);
+  router.push(`/classes?schoolId=${schoolId}` as any);
 }
 
 export function navigateToCreateClass(schoolId: string) {
-  router.push(`/(tabs)/classes/create?schoolId=${schoolId}` as any);
+  router.push(`/classes/create?schoolId=${schoolId}` as any);
 }
 
 export function navigateToEditClass(classId: string, schoolId: string) {
-  router.push(`/(tabs)/classes/edit/${classId}?schoolId=${schoolId}` as any);
+  router.push(`/classes/edit/${classId}?schoolId=${schoolId}` as any);
 }
 
 export function dismissModal() {

@@ -4,6 +4,7 @@ import {
   Text,
   Button,
   ButtonText,
+  ButtonIcon,
   Box,
   HStack,
   Badge,
@@ -13,6 +14,7 @@ import { FlatList, Pressable } from 'react-native';
 import { useClassStore } from '@/store';
 import { navigateToCreateClass, navigateToEditClass, navigateToSchoolClasses } from '@/navigation';
 import { Shift } from '@/types';
+import { Plus } from 'lucide-react-native';
 
 interface SchoolClassesListProps {
   schoolId: string;
@@ -42,7 +44,8 @@ export function SchoolClassesList({ schoolId }: SchoolClassesListProps) {
           Esta escola não possui turmas cadastradas
         </Text>
         <Button onPress={() => navigateToCreateClass(schoolId)}>
-          <ButtonText>+ Adicionar Primeira Turma</ButtonText>
+          <ButtonIcon mr="$1" as={() => <Plus size={20} color="white" />} />
+          <ButtonText>Adicionar Primeira Turma</ButtonText>
         </Button>
       </VStack>
     );
@@ -53,7 +56,8 @@ export function SchoolClassesList({ schoolId }: SchoolClassesListProps) {
       <HStack justifyContent="space-between" alignItems="center">
         <Heading size="lg">Turmas ({schoolClasses.length})</Heading>
         <Button size="sm" onPress={() => navigateToCreateClass(schoolId)}>
-          <ButtonText>+ Adicionar</ButtonText>
+          <ButtonIcon mr="$1" as={() => <Plus size={16} color="white" />} />
+          <ButtonText>Adicionar</ButtonText>
         </Button>
       </HStack>
 

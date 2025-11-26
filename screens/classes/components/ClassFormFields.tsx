@@ -19,8 +19,10 @@ import {
   SelectDragIndicatorWrapper,
   Icon,
   ChevronDownIcon,
+  HStack,
 } from '@gluestack-ui/themed';
 import { Shift, School } from '@/types';
+import { BookOpen, Clock, Calendar, Building } from 'lucide-react-native';
 
 const SHIFT_LABELS = {
   [Shift.MORNING]: 'Manhã',
@@ -60,12 +62,22 @@ export function ClassFormFields({
   showSchoolSelector = false,
 }: ClassFormFieldsProps) {
   return (
-    <VStack space="lg">
+    <VStack space="xl">
       <FormControl isRequired isInvalid={!!errors.name}>
         <FormControlLabel>
-          <FormControlLabelText>Nome da Turma</FormControlLabelText>
+          <HStack space="xs" alignItems="center">
+            <BookOpen size={16} color="#4b5563" />
+            <FormControlLabelText fontWeight="$semibold" color="$gray900">
+              Nome da Turma
+            </FormControlLabelText>
+          </HStack>
         </FormControlLabel>
-        <Input>
+        <Input
+          borderRadius="$lg"
+          borderWidth={1}
+          borderColor={errors.name ? '$error500' : '$gray100'}
+          bg="$white"
+        >
           <InputField
             placeholder="Ex: 1º Ano A"
             value={name}
@@ -82,10 +94,21 @@ export function ClassFormFields({
 
       <FormControl isRequired isInvalid={!!errors.shift}>
         <FormControlLabel>
-          <FormControlLabelText>Turno</FormControlLabelText>
+          <HStack space="xs" alignItems="center">
+            <Clock size={16} color="#4b5563" />
+            <FormControlLabelText fontWeight="$semibold" color="$gray900">
+              Turno
+            </FormControlLabelText>
+          </HStack>
         </FormControlLabel>
         <Select selectedValue={shift} onValueChange={(value) => onChangeShift(value as Shift)}>
-          <SelectTrigger variant="outline" size="lg">
+          <SelectTrigger
+            variant="outline"
+            size="lg"
+            borderRadius="$lg"
+            borderColor={errors.shift ? '$error500' : '$gray100'}
+            bg="$white"
+          >
             <SelectInput placeholder="Selecione o turno" />
             <SelectIcon mr="$3" as={ChevronDownIcon} />
           </SelectTrigger>
@@ -110,9 +133,19 @@ export function ClassFormFields({
 
       <FormControl isRequired isInvalid={!!errors.schoolYear}>
         <FormControlLabel>
-          <FormControlLabelText>Ano Letivo</FormControlLabelText>
+          <HStack space="xs" alignItems="center">
+            <Calendar size={16} color="#4b5563" />
+            <FormControlLabelText fontWeight="$semibold" color="$gray900">
+              Ano Letivo
+            </FormControlLabelText>
+          </HStack>
         </FormControlLabel>
-        <Input>
+        <Input
+          borderRadius="$lg"
+          borderWidth={1}
+          borderColor={errors.schoolYear ? '$error500' : '$gray100'}
+          bg="$white"
+        >
           <InputField
             placeholder="2025"
             value={schoolYear}
@@ -131,10 +164,21 @@ export function ClassFormFields({
       {showSchoolSelector && (
         <FormControl isRequired isInvalid={!!errors.schoolId}>
           <FormControlLabel>
-            <FormControlLabelText>Escola</FormControlLabelText>
+            <HStack space="xs" alignItems="center">
+              <Building size={16} color="#4b5563" />
+              <FormControlLabelText fontWeight="$semibold" color="$gray900">
+                Escola
+              </FormControlLabelText>
+            </HStack>
           </FormControlLabel>
           <Select selectedValue={schoolId} onValueChange={onChangeSchoolId}>
-            <SelectTrigger variant="outline" size="lg">
+            <SelectTrigger
+              variant="outline"
+              size="lg"
+              borderRadius="$lg"
+              borderColor={errors.schoolId ? '$error500' : '$gray100'}
+              bg="$white"
+            >
               <SelectInput placeholder="Selecione a escola" />
               <SelectIcon mr="$3" as={ChevronDownIcon} />
             </SelectTrigger>

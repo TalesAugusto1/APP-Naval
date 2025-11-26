@@ -2,6 +2,7 @@ import { useState } from 'react';
 import {
   Button,
   ButtonText,
+  ButtonIcon,
   Actionsheet,
   ActionsheetBackdrop,
   ActionsheetContent,
@@ -16,6 +17,7 @@ import {
   RadioIcon,
   CircleIcon,
 } from '@gluestack-ui/themed';
+import { SlidersHorizontal } from 'lucide-react-native';
 
 type SortOption = 'name' | 'newest' | 'classes';
 
@@ -36,7 +38,8 @@ export function SchoolFilters({ sortBy, onSortChange }: SchoolFiltersProps) {
   return (
     <>
       <Button variant="outline" size="sm" onPress={() => setIsOpen(true)}>
-        <ButtonText>🎯 Filtros</ButtonText>
+        <ButtonIcon mr="$1" as={() => <SlidersHorizontal size={16} color="#2196F3" />} />
+        <ButtonText>Filtros</ButtonText>
       </Button>
 
       <Actionsheet isOpen={isOpen} onClose={() => setIsOpen(false)}>

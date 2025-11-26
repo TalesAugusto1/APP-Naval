@@ -1,16 +1,6 @@
 import { useEffect, useState, useMemo } from 'react';
 import { FlatList, RefreshControl } from 'react-native';
-import {
-  Box,
-  VStack,
-  HStack,
-  Fab,
-  FabIcon,
-  Text,
-  Button,
-  ButtonText,
-  Spinner,
-} from '@gluestack-ui/themed';
+import { Box, VStack, HStack, Fab, FabIcon, Text, Button, ButtonText } from '@gluestack-ui/themed';
 import { useSchoolStore } from '@/store';
 import { navigateToCreateSchool } from '@/navigation';
 import { SchoolCard } from './components/SchoolCard';
@@ -18,6 +8,8 @@ import { SchoolListEmpty } from './components/SchoolListEmpty';
 import { SchoolSearchBar } from './components/SchoolSearchBar';
 import { SchoolSearchResults } from './components/SchoolSearchResults';
 import { SchoolFilters } from './components/SchoolFilters';
+import { SchoolCardSkeleton } from '@/components/SkeletonCard';
+import { Plus } from 'lucide-react-native';
 
 type SortOption = 'name' | 'newest' | 'classes';
 
@@ -70,8 +62,18 @@ export function SchoolListScreen() {
 
   if (isLoading && schools.length === 0) {
     return (
-      <Box flex={1} bg="$backgroundLight50" justifyContent="center" alignItems="center">
-        <Spinner size="large" />
+      <Box flex={1} bg="$backgroundLight50">
+        <VStack flex={1} p="$4" space="md">
+          <HStack space="sm">
+            <Box flex={1}>
+              <SchoolSearchBar />
+            </Box>
+            <SchoolFilters sortBy={sortBy} onSortChange={setSortBy} />
+          </HStack>
+          {[...Array(5)].map((_, index) => (
+            <SchoolCardSkeleton key={index} />
+          ))}
+        </VStack>
       </Box>
     );
   }
@@ -118,11 +120,16 @@ export function SchoolListScreen() {
         onPress={navigateToCreateSchool}
         bg="$primary500"
         $hover-bg="$primary600"
+        style={{
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 4 },
+          shadowOpacity: 0.15,
+          shadowRadius: 12,
+          elevation: 5,
+        }}
       >
         <FabIcon>
-          <Text color="$white" fontSize={24}>
-            +
-          </Text>
+          <Plus size={24} color="white" />
         </FabIcon>
       </Fab>
     </Box>
