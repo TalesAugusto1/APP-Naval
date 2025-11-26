@@ -148,6 +148,8 @@ export function ClassFormScreen() {
   const isValid =
     name.trim().length >= 2 && schoolYear.trim().length > 0 && schoolId.trim().length > 0;
 
+  const isSchoolPreselected = mode === 'create' && params.schoolId;
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -169,7 +171,7 @@ export function ClassFormScreen() {
               onChangeSchoolId={setSchoolId}
               onBlurName={() => validateField('name')}
               onBlurSchoolYear={() => validateField('schoolYear')}
-              showSchoolSelector={true}
+              showSchoolSelector={!isSchoolPreselected}
             />
 
             <Button

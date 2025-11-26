@@ -19,6 +19,8 @@ import {
   SelectDragIndicatorWrapper,
   Icon,
   ChevronDownIcon,
+  Text,
+  Box,
 } from '@gluestack-ui/themed';
 import { useThemeColors } from '@/hooks/useThemeColors';
 import { Shift, School } from '@/types';
@@ -61,6 +63,7 @@ export function ClassFormFields({
   showSchoolSelector = false,
 }: ClassFormFieldsProps) {
   const colors = useThemeColors();
+  const selectedSchool = schools.find((s) => s.id === schoolId);
 
   return (
     <VStack space="xl">
@@ -71,37 +74,53 @@ export function ClassFormFields({
             Escola
           </FormControlLabelText>
         </FormControlLabel>
-        <Select
-          selectedValue={schoolId}
-          onValueChange={onChangeSchoolId}
-          accessible={true}
-          accessibilityLabel="Escola da turma"
-          accessibilityHint="Selecione a escola para vincular esta turma"
-        >
-          <SelectTrigger
-            variant="outline"
-            size="xl"
+        {showSchoolSelector ? (
+          <Select
+            selectedValue={schoolId}
+            onValueChange={onChangeSchoolId}
+            accessible={true}
+            accessibilityLabel="Escola da turma"
+            accessibilityHint="Selecione a escola para vincular esta turma"
+          >
+            <SelectTrigger
+              variant="outline"
+              size="xl"
+              borderRadius="$2xl"
+              borderWidth={2}
+              borderColor={errors.schoolId ? '$error500' : colors.isDark ? '$gray700' : '$gray300'}
+              bg={colors.surfaceBg}
+              h={56}
+            >
+              <SelectInput placeholder="Selecione uma escola" fontSize="$md" />
+              <SelectIcon mr="$3" as={ChevronDownIcon} />
+            </SelectTrigger>
+            <SelectPortal>
+              <SelectBackdrop />
+              <SelectContent>
+                <SelectDragIndicatorWrapper>
+                  <SelectDragIndicator />
+                </SelectDragIndicatorWrapper>
+                {schools.map((school) => (
+                  <SelectItem key={school.id} label={school.name} value={school.id} />
+                ))}
+              </SelectContent>
+            </SelectPortal>
+          </Select>
+        ) : (
+          <Box
             borderRadius="$2xl"
             borderWidth={2}
-            borderColor={errors.schoolId ? '$error500' : colors.isDark ? '$gray700' : '$gray300'}
-            bg={colors.surfaceBg}
+            borderColor={colors.isDark ? '$gray700' : '$gray300'}
+            bg={colors.isDark ? '$gray800' : '$gray100'}
             h={56}
+            px="$4"
+            justifyContent="center"
           >
-            <SelectInput placeholder="Selecione uma escola" fontSize="$md" />
-            <SelectIcon mr="$3" as={ChevronDownIcon} />
-          </SelectTrigger>
-          <SelectPortal>
-            <SelectBackdrop />
-            <SelectContent>
-              <SelectDragIndicatorWrapper>
-                <SelectDragIndicator />
-              </SelectDragIndicatorWrapper>
-              {schools.map((school) => (
-                <SelectItem key={school.id} label={school.name} value={school.id} />
-              ))}
-            </SelectContent>
-          </SelectPortal>
-        </Select>
+            <Text fontSize="$md" color={colors.textColor}>
+              {selectedSchool?.name || 'Escola não encontrada'}
+            </Text>
+          </Box>
+        )}
         {errors.schoolId && (
           <FormControlError>
             <FormControlErrorText>{errors.schoolId}</FormControlErrorText>
