@@ -1,36 +1,59 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
+import { School, Settings } from 'lucide-react-native';
 
 import { HapticTab } from '@/components/haptic-tab';
-import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+        tabBarActiveTintColor: '#2563eb',
+        tabBarInactiveTintColor: '#9ca3af',
         headerShown: false,
         tabBarButton: HapticTab,
+        tabBarStyle: {
+          backgroundColor: '#ffffff',
+          borderTopWidth: 1,
+          borderTopColor: '#e5e7eb',
+          paddingBottom: 8,
+          paddingTop: 8,
+          height: 65,
+        },
+        tabBarLabelStyle: {
+          fontSize: 12,
+          fontWeight: '500',
+          marginTop: 4,
+        },
+        tabBarItemStyle: {
+          paddingVertical: 4,
+        },
       }}
     >
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
-          tabBarAccessibilityLabel: 'Home - Lista de escolas',
+          title: 'Escolas',
+          tabBarIcon: ({ color, focused }) => (
+            <School size={24} color={color} strokeWidth={focused ? 2.5 : 2} />
+          ),
+          tabBarAccessibilityLabel: 'Escolas - Lista de escolas',
         }}
       />
       <Tabs.Screen
         name="settings"
         options={{
-          title: 'Configurações',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="gearshape.fill" color={color} />,
-          tabBarAccessibilityLabel: 'Configurações do aplicativo',
+          title: 'Ajustes',
+          tabBarIcon: ({ color, focused }) => (
+            <Settings size={24} color={color} strokeWidth={focused ? 2.5 : 2} />
+          ),
+          tabBarAccessibilityLabel: 'Ajustes do aplicativo',
+        }}
+      />
+      <Tabs.Screen
+        name="classes"
+        options={{
+          href: null,
         }}
       />
     </Tabs>
