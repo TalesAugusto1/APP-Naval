@@ -1,6 +1,6 @@
 import React from 'react';
 import { Toast } from '../Toast';
-import { renderWithProviders, screen, fireEvent, waitFor } from '../../__tests__/utils/testUtils';
+import { renderWithProviders, screen, fireEvent } from '../../__tests__/utils/testUtils';
 
 describe('Toast', () => {
   beforeEach(() => {

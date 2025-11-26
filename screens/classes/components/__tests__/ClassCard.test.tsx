@@ -34,7 +34,7 @@ describe('ClassCard', () => {
   });
 
   it('should render school year', () => {
-    const classItem = mockClassData.create({ schoolYear: '2024' });
+    const classItem = mockClassData.create({ schoolYear: 2024 });
 
     renderWithProviders(<ClassCard classItem={classItem} />);
 
@@ -114,7 +114,7 @@ describe('ClassCard', () => {
     const classItem = mockClassData.create({
       name: 'Test Class',
       shift: Shift.MORNING,
-      schoolYear: '2024',
+      schoolYear: 2024,
     });
 
     renderWithProviders(<ClassCard classItem={classItem} />);

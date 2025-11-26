@@ -30,8 +30,8 @@ export const mockSchoolData = {
     name: 'Test School',
     address: '123 Test Street',
     classCount: 5,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    createdAt: new Date(),
+    updatedAt: new Date(),
     ...overrides,
   }),
 
@@ -52,22 +52,22 @@ export const mockClassData = {
     id: '1',
     name: '1º Ano A',
     schoolId: '1',
-    shift: 'morning' as Shift,
-    schoolYear: '2024',
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    shift: Shift.MORNING,
+    schoolYear: 2024,
+    createdAt: new Date(),
+    updatedAt: new Date(),
     ...overrides,
   }),
 
   createMany: (count: number, schoolId: string = '1'): Class[] => {
-    const shifts: Shift[] = ['morning', 'afternoon', 'evening'];
+    const shifts: Shift[] = [Shift.MORNING, Shift.AFTERNOON, Shift.EVENING];
     return Array.from({ length: count }, (_, i) =>
       mockClassData.create({
         id: `${i + 1}`,
         name: `Turma ${i + 1}`,
         schoolId,
         shift: shifts[i % shifts.length],
-        schoolYear: '2024',
+        schoolYear: 2024,
       })
     );
   },
