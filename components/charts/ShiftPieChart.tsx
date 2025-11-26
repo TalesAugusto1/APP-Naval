@@ -47,14 +47,14 @@ export function ShiftPieChart({ classes }: ShiftPieChartProps) {
   }
 
   const screenWidth = Dimensions.get('window').width;
-  const chartWidth = Math.min(screenWidth - 48, 350);
+  const chartWidth = Math.min(screenWidth - 96, 300);
 
   return (
-    <VStack space="md" alignItems="center">
+    <VStack space="md" alignItems="center" width="$full">
       <PieChart
         data={chartData}
         width={chartWidth}
-        height={220}
+        height={200}
         chartConfig={{
           color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
         }}

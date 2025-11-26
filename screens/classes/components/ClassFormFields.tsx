@@ -63,11 +63,11 @@ export function ClassFormFields({
   const colors = useThemeColors();
 
   return (
-    <VStack space="lg">
+    <VStack space="xl">
       {/* School Field - Always First */}
       <FormControl isRequired isInvalid={!!errors.schoolId}>
-        <FormControlLabel>
-          <FormControlLabelText fontWeight="$medium" color={colors.textColor}>
+        <FormControlLabel mb="$2">
+          <FormControlLabelText fontWeight="$semibold" fontSize="$md" color={colors.textColor}>
             Escola
           </FormControlLabelText>
         </FormControlLabel>
@@ -80,12 +80,14 @@ export function ClassFormFields({
         >
           <SelectTrigger
             variant="outline"
-            size="lg"
-            borderRadius="$xl"
-            borderColor={errors.schoolId ? '$error500' : '$gray200'}
+            size="xl"
+            borderRadius="$2xl"
+            borderWidth={2}
+            borderColor={errors.schoolId ? '$error500' : colors.isDark ? '$gray700' : '$gray300'}
             bg={colors.surfaceBg}
+            h={56}
           >
-            <SelectInput placeholder="Selecione uma escola" />
+            <SelectInput placeholder="Selecione uma escola" fontSize="$md" />
             <SelectIcon mr="$3" as={ChevronDownIcon} />
           </SelectTrigger>
           <SelectPortal>
@@ -109,22 +111,24 @@ export function ClassFormFields({
 
       {/* Class Name Field */}
       <FormControl isRequired isInvalid={!!errors.name}>
-        <FormControlLabel>
-          <FormControlLabelText fontWeight="$medium" color={colors.textColor}>
+        <FormControlLabel mb="$2">
+          <FormControlLabelText fontWeight="$semibold" fontSize="$md" color={colors.textColor}>
             Nome da Turma
           </FormControlLabelText>
         </FormControlLabel>
         <Input
-          borderRadius="$xl"
-          borderWidth={1}
-          borderColor={errors.name ? '$error500' : '$gray200'}
-          bg="$backgroundLight50"
+          borderRadius="$2xl"
+          borderWidth={2}
+          borderColor={errors.name ? '$error500' : colors.isDark ? '$gray700' : '$gray300'}
+          bg={colors.surfaceBg}
+          h={56}
         >
           <InputField
             placeholder="Ex: 7º Ano C"
             value={name}
             onChangeText={onChangeName}
             onBlur={onBlurName}
+            fontSize="$md"
             accessible={true}
             accessibilityLabel="Nome da turma"
             accessibilityHint="Digite o nome da turma"
@@ -139,8 +143,8 @@ export function ClassFormFields({
 
       {/* Shift Field */}
       <FormControl isRequired isInvalid={!!errors.shift}>
-        <FormControlLabel>
-          <FormControlLabelText fontWeight="$medium" color={colors.textColor}>
+        <FormControlLabel mb="$2">
+          <FormControlLabelText fontWeight="$semibold" fontSize="$md" color={colors.textColor}>
             Turno
           </FormControlLabelText>
         </FormControlLabel>
@@ -153,12 +157,14 @@ export function ClassFormFields({
         >
           <SelectTrigger
             variant="outline"
-            size="lg"
-            borderRadius="$xl"
-            borderColor={errors.shift ? '$error500' : '$gray200'}
+            size="xl"
+            borderRadius="$2xl"
+            borderWidth={2}
+            borderColor={errors.shift ? '$error500' : colors.isDark ? '$gray700' : '$gray300'}
             bg={colors.surfaceBg}
+            h={56}
           >
-            <SelectInput placeholder="Selecione o turno" />
+            <SelectInput placeholder="Selecione o turno" fontSize="$md" />
             <SelectIcon mr="$3" as={ChevronDownIcon} />
           </SelectTrigger>
           <SelectPortal>
@@ -182,16 +188,17 @@ export function ClassFormFields({
 
       {/* School Year Field */}
       <FormControl isRequired isInvalid={!!errors.schoolYear}>
-        <FormControlLabel>
-          <FormControlLabelText fontWeight="$medium" color={colors.textColor}>
+        <FormControlLabel mb="$2">
+          <FormControlLabelText fontWeight="$semibold" fontSize="$md" color={colors.textColor}>
             Ano Letivo
           </FormControlLabelText>
         </FormControlLabel>
         <Input
-          borderRadius="$xl"
-          borderWidth={1}
-          borderColor={errors.schoolYear ? '$error500' : '$gray200'}
-          bg="$backgroundLight50"
+          borderRadius="$2xl"
+          borderWidth={2}
+          borderColor={errors.schoolYear ? '$error500' : colors.isDark ? '$gray700' : '$gray300'}
+          bg={colors.surfaceBg}
+          h={56}
         >
           <InputField
             placeholder="2025"
@@ -199,6 +206,7 @@ export function ClassFormFields({
             onChangeText={onChangeSchoolYear}
             onBlur={onBlurSchoolYear}
             keyboardType="number-pad"
+            fontSize="$md"
             accessible={true}
             accessibilityLabel="Ano letivo"
             accessibilityHint="Digite o ano letivo da turma"

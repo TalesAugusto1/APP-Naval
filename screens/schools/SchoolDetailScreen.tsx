@@ -28,7 +28,7 @@ export function SchoolDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { selectedSchool, fetchSchoolById, isLoading, error } = useSchoolStore();
   const colors = useThemeColors();
-  const [activeTab, setActiveTab] = useState<TabType>('classes');
+  const [activeTab, setActiveTab] = useState<TabType>('overview');
   const insets = useSafeAreaInsets();
 
   useEffect(() => {
@@ -98,7 +98,7 @@ export function SchoolDetailScreen() {
               <Box
                 py="$2"
                 px="$4"
-                borderRadius="$xl"
+                borderRadius="$full"
                 style={{
                   backgroundColor: activeTab === 'overview' ? '#2563eb' : colors.surfaceBg,
                   opacity: pressed ? 0.8 : 1,
@@ -119,7 +119,7 @@ export function SchoolDetailScreen() {
               <Box
                 py="$2"
                 px="$4"
-                borderRadius="$xl"
+                borderRadius="$full"
                 style={{
                   backgroundColor: activeTab === 'classes' ? '#2563eb' : colors.surfaceBg,
                   opacity: pressed ? 0.8 : 1,

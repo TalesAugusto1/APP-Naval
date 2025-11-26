@@ -61,8 +61,11 @@ export function SettingsScreen() {
   };
 
   return (
-    <ScrollView style={{ flex: 1, backgroundColor: bgColor }}>
-      <VStack flex={1} px="$6" pt="$6" pb="$6" space="xl" style={{ paddingTop: insets.top + 24 }}>
+    <ScrollView
+      style={{ flex: 1, backgroundColor: bgColor }}
+      contentContainerStyle={{ paddingBottom: 120 + insets.bottom }}
+    >
+      <VStack flex={1} px="$6" pt="$6" space="xl" style={{ paddingTop: insets.top + 24 }}>
         <Heading size="2xl" color={textColor}>
           Configurações
         </Heading>

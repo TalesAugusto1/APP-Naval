@@ -13,6 +13,9 @@ import {
   AlertDialogBody,
   AlertDialogFooter,
   Text,
+  Input,
+  InputField,
+  HStack,
 } from '@gluestack-ui/themed';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useLocalSearchParams } from 'expo-router';
@@ -22,6 +25,7 @@ import { validateCreateClass } from '@/services';
 import { goBack } from '@/navigation';
 import { ClassFormFields } from './components/ClassFormFields';
 import { Shift } from '@/types';
+import { AlertTriangle } from 'lucide-react-native';
 
 type FormMode = 'create' | 'edit';
 
@@ -48,6 +52,7 @@ export function ClassFormScreen() {
     schoolId?: string;
   }>({});
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [deleteConfirmationText, setDeleteConfirmationText] = useState('');
 
   useEffect(() => {
     fetchSchools();
@@ -119,14 +124,25 @@ export function ClassFormScreen() {
   const handleDelete = async () => {
     if (!params.id) return;
 
+    if (deleteConfirmationText.trim() !== name.trim()) {
+      showToast('O nome digitado não corresponde ao nome da turma', 'error');
+      return;
+    }
+
     try {
       await deleteClass(params.id);
       showToast('Turma excluída com sucesso!', 'success');
       setShowDeleteDialog(false);
+      setDeleteConfirmationText('');
       goBack();
     } catch (error) {
       showToast(error instanceof Error ? error.message : 'Erro ao excluir turma', 'error');
     }
+  };
+
+  const handleCloseDeleteDialog = () => {
+    setShowDeleteDialog(false);
+    setDeleteConfirmationText('');
   };
 
   const isValid =
@@ -162,10 +178,17 @@ export function ClassFormScreen() {
               onPress={handleSubmit}
               isDisabled={!isValid || isLoading}
               bg="#2563eb"
-              borderRadius="$xl"
-              h={48}
+              borderRadius="$2xl"
+              h={56}
+              shadowColor="#2563eb"
+              shadowOffset={{ width: 0, height: 4 }}
+              shadowOpacity={0.3}
+              shadowRadius={8}
+              elevation={4}
             >
-              <ButtonText>{isLoading ? 'Salvando...' : 'Salvar Turma'}</ButtonText>
+              <ButtonText fontSize="$md" fontWeight="$semibold">
+                {isLoading ? 'Salvando...' : 'Salvar Turma'}
+              </ButtonText>
             </Button>
 
             {mode === 'edit' && (
@@ -174,28 +197,85 @@ export function ClassFormScreen() {
                 variant="outline"
                 onPress={() => setShowDeleteDialog(true)}
                 isDisabled={isLoading}
+                borderRadius="$2xl"
+                h={56}
+                borderWidth={2}
+                borderColor="$error500"
               >
-                <ButtonText>Excluir Turma</ButtonText>
+                <HStack space="sm" alignItems="center">
+                  <AlertTriangle size={20} color="#ef4444" />
+                  <ButtonText fontSize="$md" fontWeight="$semibold">
+                    Excluir Turma
+                  </ButtonText>
+                </HStack>
               </Button>
             )}
           </VStack>
         </Box>
       </ScrollView>
 
-      <AlertDialog isOpen={showDeleteDialog} onClose={() => setShowDeleteDialog(false)}>
+      <AlertDialog isOpen={showDeleteDialog} onClose={handleCloseDeleteDialog}>
         <AlertDialogBackdrop />
-        <AlertDialogContent>
+        <AlertDialogContent maxWidth="$full" mx="$4">
           <AlertDialogHeader>
-            <Heading size="md">Confirmar Exclusão</Heading>
+            <HStack space="sm" alignItems="center">
+              <Box bg="$error100" p="$2" borderRadius="$full">
+                <AlertTriangle size={24} color="#ef4444" />
+              </Box>
+              <Heading size="lg" color="$error600">
+                Confirmar Exclusão
+              </Heading>
+            </HStack>
           </AlertDialogHeader>
           <AlertDialogBody>
-            <Text>Tem certeza que deseja excluir esta turma? Esta ação não pode ser desfeita.</Text>
+            <VStack space="md">
+              <Text size="md" color={colors.textColor}>
+                Esta ação não pode ser desfeita. A turma será permanentemente excluída.
+              </Text>
+              <Box
+                bg={colors.isDark ? '$error900' : '$error50'}
+                p="$3"
+                borderRadius="$lg"
+                borderWidth={1}
+                borderColor="$error300"
+              >
+                <Text size="sm" fontWeight="$medium" color="$error700" mb="$1">
+                  Para confirmar, digite o nome da turma:
+                </Text>
+                <Text size="md" fontWeight="$bold" color={colors.textColor}>
+                  {name}
+                </Text>
+              </Box>
+              <Input
+                borderRadius="$xl"
+                borderWidth={2}
+                borderColor={deleteConfirmationText === name ? '$success500' : '$gray300'}
+                bg="$backgroundLight50"
+              >
+                <InputField
+                  placeholder="Digite o nome da turma aqui"
+                  value={deleteConfirmationText}
+                  onChangeText={setDeleteConfirmationText}
+                  autoFocus={true}
+                  accessible={true}
+                  accessibilityLabel="Campo de confirmação de exclusão"
+                  accessibilityHint="Digite o nome da turma para confirmar a exclusão"
+                />
+              </Input>
+            </VStack>
           </AlertDialogBody>
           <AlertDialogFooter>
-            <Button variant="outline" onPress={() => setShowDeleteDialog(false)}>
+            <Button variant="outline" onPress={handleCloseDeleteDialog} flex={1} borderRadius="$xl">
               <ButtonText>Cancelar</ButtonText>
             </Button>
-            <Button action="negative" onPress={handleDelete} ml="$3">
+            <Button
+              action="negative"
+              onPress={handleDelete}
+              ml="$3"
+              flex={1}
+              borderRadius="$xl"
+              isDisabled={deleteConfirmationText.trim() !== name.trim()}
+            >
               <ButtonText>Excluir</ButtonText>
             </Button>
           </AlertDialogFooter>

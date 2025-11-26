@@ -18,20 +18,34 @@ export default function TabLayout() {
         headerShown: false,
         tabBarButton: HapticTab,
         tabBarStyle: {
+          position: 'absolute',
           backgroundColor: colors.isDark ? '#1a1a1a' : '#ffffff',
-          borderTopWidth: 1,
-          borderTopColor: colors.borderColor,
-          paddingBottom: insets.bottom > 0 ? insets.bottom : 8,
-          paddingTop: 8,
-          height: 65 + (insets.bottom > 0 ? insets.bottom : 0),
+          borderTopWidth: 0,
+          borderRadius: 24,
+          marginHorizontal: 16,
+          marginBottom: insets.bottom > 0 ? insets.bottom + 8 : 16,
+          paddingBottom: 12,
+          paddingTop: 12,
+          height: 70,
+          shadowColor: colors.isDark ? '#000' : '#000',
+          shadowOffset: {
+            width: 0,
+            height: -4,
+          },
+          shadowOpacity: colors.isDark ? 0.4 : 0.15,
+          shadowRadius: 20,
+          elevation: 12,
         },
         tabBarLabelStyle: {
           fontSize: 12,
-          fontWeight: '500',
+          fontWeight: '600',
           marginTop: 4,
+          marginBottom: 0,
         },
         tabBarItemStyle: {
-          paddingVertical: 4,
+          justifyContent: 'center',
+          alignItems: 'center',
+          paddingVertical: 0,
         },
       }}
     >
@@ -40,7 +54,7 @@ export default function TabLayout() {
         options={{
           title: 'Escolas',
           tabBarIcon: ({ color, focused }) => (
-            <School size={24} color={color} strokeWidth={focused ? 2.5 : 2} />
+            <School size={26} color={color} strokeWidth={focused ? 2.5 : 2} />
           ),
           tabBarAccessibilityLabel: 'Escolas - Lista de escolas',
         }}
@@ -50,7 +64,7 @@ export default function TabLayout() {
         options={{
           title: 'Ajustes',
           tabBarIcon: ({ color, focused }) => (
-            <Settings size={24} color={color} strokeWidth={focused ? 2.5 : 2} />
+            <Settings size={26} color={color} strokeWidth={focused ? 2.5 : 2} />
           ),
           tabBarAccessibilityLabel: 'Ajustes do aplicativo',
         }}

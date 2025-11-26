@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo } from 'react';
 import { FlatList, RefreshControl } from 'react-native';
-import { Box, VStack, HStack, Fab, FabIcon, Text, Button, ButtonText } from '@gluestack-ui/themed';
+import { Box, VStack, HStack, Text, Button, ButtonText } from '@gluestack-ui/themed';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useSchoolStore } from '@/store';
 import { useAuthStore } from '@/store/useAuthStore';
@@ -13,6 +13,7 @@ import { SchoolSearchBar } from './components/SchoolSearchBar';
 import { SchoolSearchResults } from './components/SchoolSearchResults';
 import { SchoolFilters } from './components/SchoolFilters';
 import { SchoolCardSkeleton } from '@/components/SkeletonCard';
+import { AnimatedFAB } from '@/components/AnimatedFAB';
 import { Plus } from 'lucide-react-native';
 
 type SortOption = 'name' | 'newest' | 'classes';
@@ -125,35 +126,19 @@ export function SchoolListScreen() {
             data={sortedSchools}
             renderItem={({ item }) => <SchoolCard school={item} />}
             keyExtractor={(item) => item.id}
-            contentContainerStyle={{ paddingBottom: 80 + insets.bottom }}
+            contentContainerStyle={{ paddingBottom: 120 + insets.bottom }}
             refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />}
           />
         )}
       </VStack>
 
-      <Fab
-        size="lg"
-        placement="bottom right"
+      <AnimatedFAB
+        icon={Plus}
         onPress={handleCreateSchool}
-        bg="$primary500"
-        $hover-bg="$primary600"
-        accessible={true}
-        accessibilityRole="button"
         accessibilityLabel="Adicionar nova escola"
         accessibilityHint="Toque para abrir o formulário de cadastro de escola"
-        style={{
-          shadowColor: '#000',
-          shadowOffset: { width: 0, height: 4 },
-          shadowOpacity: 0.15,
-          shadowRadius: 12,
-          elevation: 5,
-          marginBottom: insets.bottom > 0 ? insets.bottom + 8 : 8,
-        }}
-      >
-        <FabIcon>
-          <Plus size={24} color="white" />
-        </FabIcon>
-      </Fab>
+        bottomOffset={insets.bottom + 90}
+      />
     </Box>
   );
 }

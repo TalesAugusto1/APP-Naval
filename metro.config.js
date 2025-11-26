@@ -42,3 +42,4 @@ config.resolver = {
 config.resetCache = false;
 
 module.exports = config;
+
